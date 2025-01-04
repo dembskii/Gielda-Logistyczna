@@ -1,0 +1,16 @@
+{
+  "name": "gielda-logistyczna",
+  "version": "1.0.0",
+  "description": "Dominik Dembski",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "nodemon src/app.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "ejs": "^3.1.6"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
