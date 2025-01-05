@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const auth = require('../middlewareAuth')
+
 
 
 // Rejestracja
@@ -65,9 +65,20 @@ router.post('/login',async (req, res) => {
             // secure: process.env.NODE_ENV === 'production',
             maxAge: 24 * 60 * 60 * 1000 // 24 hours
         });
-        res.redirect('/')
+        res.redirect('/dashboard')
     } catch (error) {
         res.status(400).json({ error: error.message });
+    }
+});
+
+
+// Wylogowywanie
+router.post('/logout', (req, res) => {
+    try {
+        res.clearCookie('auth_token');
+        res.redirect('/');
+    } catch (error) {
+        res.status(500).json({ error: 'Błąd podczas wylogowywania' });
     }
 });
 
