@@ -9,8 +9,22 @@ router.get('/', authMiddleware ,async (req, res) => {
             layout: 'layouts/dashboardLayout'
         });
     } else if ( req.user.role === 'spedytor') {
+
+        const [allJobsResponse, acceptedJobsResponse] = await Promise.all([
+            axios.get('http://localhost:3000/api/job/all', {
+                headers: { Cookie: `auth_token=${req.cookies.auth_token}` }
+            }),
+            axios.get('http://localhost:3000/api/job/accepted-jobs', {
+                headers: { Cookie: `auth_token=${req.cookies.auth_token}` }
+            })
+        ]);
+
+        
+
         res.render('spedytorDashboard', {
-            layout: 'layouts/dashboardLayout'
+            layout: 'layouts/dashboardLayout',
+            jobs: allJobsResponse.data,
+            acceptedJobs:acceptedJobsResponse.data
         });
     } else if ( req.user.role === 'zleceniodawca') {
 

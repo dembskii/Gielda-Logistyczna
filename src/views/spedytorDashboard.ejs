@@ -1,4 +1,78 @@
 
-<div id="driver-dashboard">
-    Narazie nic tu nie ma spedytor
+<div id="spedytor-dashboard">
+    <table id="accepted-jobs" class="jobs-table">
+        <h3>Przyjęte zlecenia</h3>
+        <thead>
+            <tr>
+                <th>Cena</th>
+                <th>Waga</th>
+                <th>Wymiary</th>
+                <th>Adres odbioru</th>
+                <th>Data odbioru</th>
+                <th>Adres dostawy</th>
+                <th>Data dostawy</th>
+                <th>Odległość</th>
+                <th>Status</th>
+                <th>Data utworzenia</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% acceptedJobs.forEach(job => { %>
+                <tr>
+                    <td><%= job.price %> PLN</td>
+                    <td><%= job.weight %> kg</td>
+                    <td><%= job.dimensions.length %>x<%= job.dimensions.width %>x<%= job.dimensions.height %> cm</td>
+                    <td><%= job.pickup.address %></td>
+                    <td><%= new Date(job.pickup.date).toLocaleString() %></td>
+                    <td><%= job.delivery.address %></td>
+                    <td><%= new Date(job.delivery.date).toLocaleString() %></td>
+                    <td><%= job.distance %> km</td>
+                    <td class="status-<%= job.status %>"><%= job.status %></td>
+                    <td><%= new Date(job.createdAt).toLocaleString() %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <table id="all-jobs" class="jobs-table">
+        <h3>Wszystkie zlecenia</h3>
+        <thead>
+            <tr>
+                <th>Cena</th>
+                <th>Waga</th>
+                <th>Wymiary</th>
+                <th>Adres odbioru</th>
+                <th>Data odbioru</th>
+                <th>Adres dostawy</th>
+                <th>Data dostawy</th>
+                <th>Odległość</th>
+                <th>Status</th>
+                <th>Data utworzenia</th>
+                <th>Akcje</th>
+            </tr>
+        </thead>
+        <tbody>
+    <% jobs.forEach(job => { %>
+        <tr>
+            <td><%= job.price %> PLN</td>
+            <td><%= job.weight %> kg</td>
+            <td><%= job.dimensions.length %>x<%= job.dimensions.width %>x<%= job.dimensions.height %> cm</td>
+            <td><%= job.pickup.address %></td>
+            <td><%= new Date(job.pickup.date).toLocaleString() %></td>
+            <td><%= job.delivery.address %></td>
+            <td><%= new Date(job.delivery.date).toLocaleString() %></td>
+            <td><%= job.distance %> km</td>
+            <td class="status-<%= job.status %>"><%= job.status %></td>
+            <td><%= new Date(job.createdAt).toLocaleString() %></td>
+            <td>
+                <% if (job.status === 'active') { %>
+                    <form action="/api/job/<%= job._id %>/accept" method="POST">
+                        <button type="submit" class="accept-btn">Przyjmij zlecenie</button>
+                    </form>
+                <% } %>
+            </td>
+        </tr>
+    <% }); %>
+</tbody>
+</table>
 </div>

@@ -38,6 +38,10 @@ const jobSchema = new mongoose.Schema({
         type: String,
         enum: ['active', 'assigned', 'completed', 'cancelled'],
         default: 'active'
+    },
+    spedytorId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     }
 }, {
     timestamps: true

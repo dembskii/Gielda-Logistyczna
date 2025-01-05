@@ -51,7 +51,8 @@ router.delete('/:id', authMiddleware, async (req, res) => {
 });
 
 // Przyjmowanie zlecenia
-router.put('/:id/accept', authMiddleware, async (req, res) => {
+// Musi być POST zamiast PUT ponieważ html domyślnie nie wspiera PUT
+router.post('/:id/accept', authMiddleware, async (req, res) => {
     try {
         const job = await Job.findOne({ 
             _id: req.params.id, 
@@ -63,10 +64,10 @@ router.put('/:id/accept', authMiddleware, async (req, res) => {
         }
 
         job.status = 'assigned';
-        job.driverId = req.user.id;
+        job.spedytorId = req.user.id;
         await job.save();
 
-        res.json(job);
+        res.redirect('/dashboard')
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -85,6 +86,24 @@ router.get('/own-jobs', authMiddleware, async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+// Pobieranie przyjętych zleceń przez spedytora
+router.get('/accepted-jobs', authMiddleware, async (req, res) => {
+    try {
+        const jobs = await Job.find({ 
+            spedytorId: req.user.id,
+            status: 'assigned'
+        })
+        .populate('userId', 'email')
+        .populate('spedytorId', 'email')
+        .sort({ createdAt: -1 });
+
+        res.json(jobs);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 
 module.exports = router;
 
