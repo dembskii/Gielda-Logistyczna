@@ -1,4 +1,88 @@
+<div id="client-dashboard">
+    <div id="add-job">
+        <div id="add-job-form">
+            <form action="/api/job/add" method="post">
+                <div class="form-group">
+                    <label for="price">Cena (PLN)</label>
+                    <input type="number" id="price" name="price" min="0" required>
+                </div>
 
-<div id="driver-dashboard">
-    Narazie nic tu nie ma client
+                <div class="form-group">
+                    <label for="weight">Waga (kg)</label>
+                    <input type="number" id="weight" name="weight" min="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Wymiary (cm)</label>
+                    <div class="dimensions">
+                        <input type="number" name="dimensions[length]" placeholder="Długość" required>
+                        <input type="number" name="dimensions[width]" placeholder="Szerokość" required>
+                        <input type="number" name="dimensions[height]" placeholder="Wysokość" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="pickup_address">Adres odbioru</label>
+                    <input type="text" id="pickup_address" name="pickup[address]" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="pickup_date">Data i czas odbioru</label>
+                    <input type="datetime-local" id="pickup_date" name="pickup[date]" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="delivery_address">Adres dostawy</label>
+                    <input type="text" id="delivery_address" name="delivery[address]" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="delivery_date">Data i czas dostawy</label>
+                    <input type="datetime-local" id="delivery_date" name="delivery[date]" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="distance">Odległość (km)</label>
+                    <input type="number" id="distance" name="distance" min="0" required>
+                </div>
+
+                <button type="submit" class="submit-btn">Dodaj zlecenie</button>
+            </form>
+        </div>
+    </div>
+    <div id="client-jobs">
+        <table class="jobs-table">
+            <thead>
+                <tr>
+                    <th>Cena</th>
+                    <th>Waga</th>
+                    <th>Wymiary</th>
+                    <th>Adres odbioru</th>
+                    <th>Data odbioru</th>
+                    <th>Adres dostawy</th>
+                    <th>Data dostawy</th>
+                    <th>Odległość</th>
+                    <th>Status</th>
+                    <th>Data utworzenia</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% jobs.forEach(job => { %>
+                    <tr>
+                        <td><%= job.price %> PLN</td>
+                        <td><%= job.weight %> kg</td>
+                        <td><%= job.dimensions.length %>x<%= job.dimensions.width %>x<%= job.dimensions.height %> cm</td>
+                        <td><%= job.pickup.address %></td>
+                        <td><%= new Date(job.pickup.date).toLocaleString() %></td>
+                        <td><%= job.delivery.address %></td>
+                        <td><%= new Date(job.delivery.date).toLocaleString() %></td>
+                        <td><%= job.distance %> km</td>
+                        <td class="status-<%= job.status %>"><%= job.status %></td>
+                        <td><%= new Date(job.createdAt).toLocaleString() %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
 </div>
+
