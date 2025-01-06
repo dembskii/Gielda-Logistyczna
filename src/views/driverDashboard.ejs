@@ -1,4 +1,26 @@
 
 <div id="driver-dashboard">
-    Narazie nic tu nie ma kierowca
+
+    <div class="invitations-section">
+        <h3>Zaproszenia od spedytorów</h3>
+        <% if (user.pendingInvitations && user.pendingInvitations.length > 0) { %>
+            <% user.pendingInvitations.forEach(invitation => { %>
+                <div class="invitation-card">
+                    <p>Spedytor: <%= invitation.spedytorId.email %></p>
+                    <div class="invitation-actions">
+                        <form action="/api/job/respond-invitation/<%= invitation._id %>" method="POST" style="display: inline;">
+                            <input type="hidden" name="response" value="accept">
+                            <button type="submit" class="btn-accept">Akceptuj</button>
+                        </form>
+                        <form action="/api/job/respond-invitation/<%= invitation._id %>" method="POST" style="display: inline;">
+                            <input type="hidden" name="response" value="reject">
+                            <button type="submit" class="btn-reject">Odrzuć</button>
+                        </form>
+                    </div>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <p>Brak oczekujących zaproszeń</p>
+        <% } %>
+    </div>
 </div>

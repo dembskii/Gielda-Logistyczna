@@ -5,6 +5,16 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, enum: ['kierowca', 'zleceniodawca', 'spedytor'], required: true },
+    isOnline: { type: Boolean, default: false },
+    spedytorIds: [{ 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User'
+    }],
+    pendingInvitations: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Invitation',
+        
+    }]
 });
 // Przerobić potem żeby hashowanie było client side
 userSchema.pre('save', async function(next) {

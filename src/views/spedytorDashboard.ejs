@@ -1,5 +1,59 @@
-
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const socket = io();
+        const userId = '<%= user.id %>';
+        const userRole = '<%= user.role %>';
+        
+        // Przeładowywanie okna, gdy driver zaakceptuje zaproszenie
+        if (userRole === 'spedytor') {
+            socket.on('driver_accepted', () => {
+                window.location.reload();
+            });
+        }
+    });
+</script>
 <div id="spedytor-dashboard">
+
+    <div class="drivers-section">
+        <div class="available-drivers">
+            <h3>Dostępni kierowcy</h3>
+            <div class="drivers-grid">
+                <% freeDrivers.forEach(driver => { %>
+                    <div class="driver-card">
+                        <div class="driver-name"><%= driver.firstName %> <%= driver.lastName %></div>
+                        <div class="status-indicator <%= driver.isOnline ? 'online' : 'offline' %>" 
+                             data-user-status="<%= driver._id %>">
+                            <%= driver.isOnline ? '🟢' : '🔴' %>
+                        </div>
+                        <form action="/api/job/invite-driver/<%= driver._id %>" method="POST">
+                            <button type="submit" class="btn-invite">Zaproś do zespołu</button>
+                        </form>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+
+        <div class="managed-drivers">
+            <h3>Mój zespół</h3>
+            <div class="drivers-grid">
+                <% managedDrivers.forEach(driver => { %>
+                    <div class="driver-card">
+                        <div class="driver-name">
+                            <%= driver.firstName %> <%= driver.lastName %>
+                        </div>
+                        <div class="status-indicator <%= driver.isOnline ? 'online' : 'offline' %>" 
+                             data-user-status="<%= driver._id %>">
+                            <%= driver.isOnline ? '🟢' : '🔴' %>
+                        </div>
+                        <button onclick="removeDriver('<%= driver._id %>')" class="btn-remove">
+                            Usuń z zespołu
+                        </button>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    </div>
+
     <table id="accepted-jobs" class="jobs-table">
         <h3>Przyjęte zlecenia</h3>
         <thead>

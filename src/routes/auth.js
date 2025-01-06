@@ -24,7 +24,6 @@ router.post('/register', async (req, res) => {
 
         res.cookie('auth_token', token, {
             httpOnly: true,
-            // secure: process.env.NODE_ENV === 'production',
             maxAge: 24 * 60 * 60 * 1000 // 24 hours
         });
 
@@ -73,8 +72,10 @@ router.post('/login',async (req, res) => {
 
 
 // Wylogowywanie
-router.post('/logout', (req, res) => {
+router.post('/logout', async (req, res) => {
     try {
+        await User.findByIdAndUpdate(req.user.id, { isOnline: false });
+        
         res.clearCookie('auth_token');
         res.redirect('/');
     } catch (error) {
