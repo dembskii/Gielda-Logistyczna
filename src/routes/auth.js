@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const authMiddleware = require('../authMiddleware')
 
 
 
@@ -72,10 +73,9 @@ router.post('/login',async (req, res) => {
 
 
 // Wylogowywanie
-router.post('/logout', async (req, res) => {
+router.post('/logout', authMiddleware, async (req, res) => {
     try {
         await User.findByIdAndUpdate(req.user.id, { isOnline: false });
-        
         res.clearCookie('auth_token');
         res.redirect('/');
     } catch (error) {
