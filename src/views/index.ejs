@@ -4,29 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Strona główna</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wdth,wght@0,75..100,300..800;1,75..100,300..800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
-    <div id="header">
-        <h2>Giełda logistyczna</h2>
-    </div>
-
-    <div id="login-select">
-        <div id="signin-option" class="option">
-            <a href="/signin">
-                <button>
-                    Zaloguj się
-                </button>
-            </a>
+    <div class="main-page-container">
+        <div id="main-page-header">
+            <h2>CargoLink</h2>
         </div>
-
-        <div id="signup-option" class="option">
-            <a href="/signup">
-                <button>
-                    Zarejestruj się
-                </button>
-            </a>
+        <div id="main-page-description">
+            <p>Witamy w CargoLink, najlepszej platformie logistycznej do zarządzania transportem i zleceniami.</p>
         </div>
+        <div id="login-select">
+            <% if (isLoggedIn) { %>
+                <div id="dashboard-option" class="option">
+                    <a href="/dashboard">
+                        <button type="button">Dashboard</button>
+                    </a>
+                </div>
+            <% } else { %>
+                <div id="signin-option" class="option">
+                    <form id="loginForm" action="/auth" method="get">
+                        <button type="submit">Zaloguj się</button>
+                    </form>
+                </div>
+                <div id="signup-option" class="option">
+                    <form id="registerForm" action="/auth" method="get">
+                        <button type="submit">Zarejestruj się</button>
+                    </form>
+                </div>
+            <% } %>
     </div>
+    
     
 </body>
 </html>

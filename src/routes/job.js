@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const Job = require('../models/Job');
-const authMiddleware = require('../authMiddleware')
+const {auth} = require('../authMiddleware')
 const User = require('../models/User')
 const Invitation = require('../models/Invitation')
 
 
 
 // Pobieranie wszystkich zleceń
-router.get('/all', authMiddleware, async (req, res) => {
+router.get('/all', auth, async (req, res) => {
     try {
         const jobs = await Job.find({ status: 'active' })
             .populate('userId', 'email');
@@ -19,7 +19,7 @@ router.get('/all', authMiddleware, async (req, res) => {
 });
 
 // Dodawanie zlecenia
-router.post('/add', authMiddleware, async (req, res) => {
+router.post('/add', auth, async (req, res) => {
     try {
         const job = new Job({
             ...req.body,
@@ -34,7 +34,7 @@ router.post('/add', authMiddleware, async (req, res) => {
 });
 
 // Usuwanie zlecenia
-router.post('/remove-job/:id', authMiddleware, async (req, res) => {
+router.post('/remove-job/:id', auth, async (req, res) => {
     try {
         const job = await Job.findOne({ 
             _id: req.params.id, 
@@ -54,7 +54,7 @@ router.post('/remove-job/:id', authMiddleware, async (req, res) => {
 
 // Przyjmowanie zlecenia
 // Musi być POST zamiast PUT ponieważ html domyślnie nie wspiera PUT
-router.post('/:id/accept', authMiddleware, async (req, res) => {
+router.post('/:id/accept', auth, async (req, res) => {
     try {
         const job = await Job.findOne({ 
             _id: req.params.id, 
@@ -77,7 +77,7 @@ router.post('/:id/accept', authMiddleware, async (req, res) => {
 
 
 // Pobieranie wszystkich zlecenia danego użytkownika (zleceniodawcy)
-router.get('/own-jobs', authMiddleware, async (req, res) => {
+router.get('/own-jobs', auth, async (req, res) => {
     try {
         const jobs = await Job.find({ userId: req.user.id })
             .populate('userId', 'email')
@@ -91,7 +91,7 @@ router.get('/own-jobs', authMiddleware, async (req, res) => {
 });
 
 // Pobieranie przyjętych zleceń przez spedytora
-router.get('/accepted-jobs', authMiddleware, async (req, res) => {
+router.get('/accepted-jobs', auth, async (req, res) => {
     try {
         const jobs = await Job.find({ 
             spedytorId: req.user.id,
@@ -109,7 +109,7 @@ router.get('/accepted-jobs', authMiddleware, async (req, res) => {
 
 
 // Pobierz wszystkich wolnych kierowców
-router.get('/drivers', authMiddleware, async (req, res) => {
+router.get('/drivers', auth, async (req, res) => {
     try {
         const drivers = await User.find({ 
             role: 'kierowca',
@@ -125,7 +125,7 @@ router.get('/drivers', authMiddleware, async (req, res) => {
 
 
 // Pobierz kierowców zarządzanych przez wysyłającego requesta
-router.get('/managed-drivers', authMiddleware, async (req, res) => {
+router.get('/managed-drivers', auth, async (req, res) => {
     try {
         if (req.user.role !== 'spedytor') {
             return res.status(403).json({ error: 'Access denied' });
@@ -145,7 +145,7 @@ router.get('/managed-drivers', authMiddleware, async (req, res) => {
 
 
 // Zapraszanie kierowcy do bycia zarządzanym przez spedytora
-router.post('/invite-driver/:driverId', authMiddleware, async (req, res) => {
+router.post('/invite-driver/:driverId', auth, async (req, res) => {
     try {
         if (req.user.role !== 'spedytor') {
             return res.status(403).json({ error: 'Tylko spedytor może wysyłać zaproszenia' });
@@ -210,7 +210,7 @@ router.post('/invite-driver/:driverId', authMiddleware, async (req, res) => {
 });
 
 // Usunięcie kierowcy
-router.post('/remove-driver/:driverId', authMiddleware, async (req, res) => {
+router.post('/remove-driver/:driverId', auth, async (req, res) => {
 
     // Znalezienie kierowcy
     const existingDriver = await User.findOne({
@@ -246,7 +246,7 @@ router.post('/remove-driver/:driverId', authMiddleware, async (req, res) => {
 
 
 // Odpowiadanie na zaproszenie spedytora
-router.post('/respond-invitation/:invitationId', authMiddleware, async (req, res) => {
+router.post('/respond-invitation/:invitationId', auth, async (req, res) => {
     try {
         const { response } = req.body;
         
@@ -289,7 +289,7 @@ router.post('/respond-invitation/:invitationId', authMiddleware, async (req, res
 });
 
 
-router.post('/assign-driver/:driverId/:jobId', authMiddleware ,async (req, res) => {
+router.post('/assign-driver/:driverId/:jobId', auth ,async (req, res) => {
 
     // Przypisanie kierowcy do zlecenia
     await Job.findOneAndUpdate({

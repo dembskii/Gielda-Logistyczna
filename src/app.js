@@ -15,8 +15,6 @@ const User = require('./models/User.js')
 
 // Importowanie routerów
 const indexRouter = require('./routes/index.js');
-const signinRouter = require('./routes/signin.js')
-const signupRouter = require('./routes/signup.js')
 const authRouter = require('./routes/auth');
 const dashboardRouter = require('./routes/dashboard.js')
 const jobRouter = require('./routes/job.js')
@@ -49,8 +47,6 @@ app.use(cookieParser());
 
 // Router
 app.use('/', indexRouter);
-app.use('/signin', signinRouter);
-app.use('/signup', signupRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/job', jobRouter);
 app.use('/dashboard',dashboardRouter);

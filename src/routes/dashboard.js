@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../authMiddleware')
+const {auth} = require('../authMiddleware')
 const axios = require('axios');
 const User = require('../models/User')
 
-router.get('/', authMiddleware ,async (req, res) => {
+router.get('/', auth ,async (req, res) => {
     try {
         // Kierowca
         if (req.user.role === 'kierowca') {

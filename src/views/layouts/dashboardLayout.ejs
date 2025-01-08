@@ -90,15 +90,28 @@
     </script>
 </head>
 <body>
-
-    <form action="/api/auth/logout" method="POST">
+    <nav class="navbar">
+        <a href="/" class="brand">CargoLink</a>
+        <div class="dashboard-type">
+            <%= user.role %> Dashboard
+        </div>
+        <div class="user-section">
+            <span class="user-info">
+                <%= user.name %> <%= user.surname %>
+            </span>
+            <form action="/api/auth/logout" method="POST" style="margin: 0;">
+                <button type="submit" class="logout-btn">Wyloguj</button>
+            </form>
+        </div>
+    </nav>
+    <!-- <form action="/api/auth/logout" method="POST">
         <button type="submit">Logout</button>
-    </form>
+    </form> -->
 
-    <main class="main-content">
+    <!-- <main class="main-content">
         <header>
             <h1>Dashboard</h1>
-        </header>
+        </header> -->
         
         <%- body %>
     </main>
