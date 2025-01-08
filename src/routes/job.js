@@ -34,7 +34,7 @@ router.post('/add', authMiddleware, async (req, res) => {
 });
 
 // Usuwanie zlecenia
-router.delete('/:id', authMiddleware, async (req, res) => {
+router.post('/remove-job/:id', authMiddleware, async (req, res) => {
     try {
         const job = await Job.findOne({ 
             _id: req.params.id, 
@@ -81,6 +81,7 @@ router.get('/own-jobs', authMiddleware, async (req, res) => {
     try {
         const jobs = await Job.find({ userId: req.user.id })
             .populate('userId', 'email')
+            .populate('driverId', 'name surname')
             .sort({ createdAt: -1 });
 
         res.json(jobs);
@@ -208,6 +209,40 @@ router.post('/invite-driver/:driverId', authMiddleware, async (req, res) => {
     }
 });
 
+// Usunięcie kierowcy
+router.post('/remove-driver/:driverId', authMiddleware, async (req, res) => {
+
+    // Znalezienie kierowcy
+    const existingDriver = await User.findOne({
+        _id:req.params.driverId,
+        spedytorIds: { $in : [req.user.id]}
+    })
+
+    if (!existingDriver) {
+        res.json({error:'Kierowca nie istnieje lub nie podlega pod spedytora, który wysłał requesta'})
+    }
+    
+    // Zaktualizowanie prac, które miał przypisane kierowca
+    await Job.updateMany(
+    { driverId: existingDriver._id },
+    { 
+        $set: { 
+            driverId: null,
+        } 
+    }
+    );
+
+    // Usunięcie spedytora z listy spedytorów zarządzających kierowcą.
+    await User.findByIdAndUpdate(
+        existingDriver._id,
+        {
+            $pull: { spedytorIds: req.user.id }
+        },
+        { new: true }
+    );
+
+    res.status(200).redirect('/dashboard')
+})
 
 
 // Odpowiadanie na zaproszenie spedytora
@@ -252,6 +287,24 @@ router.post('/respond-invitation/:invitationId', authMiddleware, async (req, res
         return res.status(500).json({ error: error.message });
     }
 });
+
+
+router.post('/assign-driver/:driverId/:jobId', authMiddleware ,async (req, res) => {
+
+    // Przypisanie kierowcy do zlecenia
+    await Job.findOneAndUpdate({
+        _id:req.params.jobId,
+        spedytorId : req.user.id,
+    },
+    {
+        $set: {
+            driverId: req.params.driverId
+            }
+        }
+    )
+
+    res.json(''),200
+})
 
 module.exports = router;
 

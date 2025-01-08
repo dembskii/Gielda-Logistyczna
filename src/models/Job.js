@@ -42,6 +42,10 @@ const jobSchema = new mongoose.Schema({
     spedytorId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
+    },
+    driverId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     }
 }, {
     timestamps: true

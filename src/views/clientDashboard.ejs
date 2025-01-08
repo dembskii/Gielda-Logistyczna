@@ -64,6 +64,8 @@
                     <th>Odległość</th>
                     <th>Status</th>
                     <th>Data utworzenia</th>
+                    <th>Kierowca</th>
+                    <th>Akcje</th>
                 </tr>
             </thead>
             <tbody>
@@ -79,6 +81,20 @@
                         <td><%= job.distance %> km</td>
                         <td class="status-<%= job.status %>"><%= job.status %></td>
                         <td><%= new Date(job.createdAt).toLocaleString() %></td>
+                        <td>
+                            <% if (job.driverId) { %>
+                                <%= job.driverId.name %> <%= job.driverId.surname %>
+                            <% } else { %>
+                                Nie przypisano
+                            <% } %>
+                        </td>
+                        <td>
+                            <form action="/api/job/remove-job/<%= job._id %>" method="POST" style="margin: 0;">
+                                <button type="submit" class="delete-btn" >
+                                    Usuń zlecenie
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                 <% }); %>
             </tbody>

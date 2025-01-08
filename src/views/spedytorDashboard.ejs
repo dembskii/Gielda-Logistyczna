@@ -11,6 +11,34 @@
             });
         }
     });
+
+    function assignDriver(jobId) {
+    const driverId = document.getElementById(`driverSelect_${jobId}`).value;
+    if (!driverId) {
+        alert('Wybierz kierowcę');
+        return;
+    }
+
+    fetch(`/api/job/assign-driver/${driverId}/${jobId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => {
+        if (response.ok) {
+            window.location.reload();
+        } else {
+            throw new Error('Błąd podczas przypisywania kierowcy');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert(error.message);
+    });
+}
+
 </script>
 <div id="spedytor-dashboard">
 
@@ -20,7 +48,7 @@
             <div class="drivers-grid">
                 <% freeDrivers.forEach(driver => { %>
                     <div class="driver-card">
-                        <div class="driver-name"><%= driver.firstName %> <%= driver.lastName %></div>
+                        <div class="driver-name"><%= driver.name %> <%= driver.surname %></div>
                         <div class="status-indicator <%= driver.isOnline ? 'online' : 'offline' %>" 
                              data-user-status="<%= driver._id %>">
                             <%= driver.isOnline ? '🟢' : '🔴' %>
@@ -39,15 +67,16 @@
                 <% managedDrivers.forEach(driver => { %>
                     <div class="driver-card">
                         <div class="driver-name">
-                            <%= driver.firstName %> <%= driver.lastName %>
+                            <%= driver.name %> <%= driver.surname %>
                         </div>
                         <div class="status-indicator <%= driver.isOnline ? 'online' : 'offline' %>" 
                              data-user-status="<%= driver._id %>">
                             <%= driver.isOnline ? '🟢' : '🔴' %>
                         </div>
-                        <button onclick="removeDriver('<%= driver._id %>')" class="btn-remove">
-                            Usuń z zespołu
-                        </button>
+                        <form action="/api/job/remove-driver/<%= driver._id %>" method="post">
+                            <button type="submit">Usuń kierowcę</button>
+                        </form>
+                        
                     </div>
                 <% }) %>
             </div>
@@ -68,6 +97,7 @@
                 <th>Odległość</th>
                 <th>Status</th>
                 <th>Data utworzenia</th>
+                <th>Akcje</th>
             </tr>
         </thead>
         <tbody>
@@ -83,6 +113,17 @@
                     <td><%= job.distance %> km</td>
                     <td class="status-<%= job.status %>"><%= job.status %></td>
                     <td><%= new Date(job.createdAt).toLocaleString() %></td>
+                    <td>
+                        <select id="driverSelect_<%= job._id %>" name="driverId" required>
+                            <option value="">Wybierz kierowcę</option>
+                            <% managedDrivers.forEach(driver => { %>
+                                <option value="<%= driver._id %>">
+                                    <%= driver.name %> <%= driver.surname %>
+                                </option>
+                            <% }); %>
+                        </select>
+                        <button onclick="assignDriver('<%= job._id %>')" class="assign-btn">Ustaw</button>
+                    </td>
                 </tr>
             <% }); %>
         </tbody>
