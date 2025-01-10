@@ -42,27 +42,13 @@
 </script>
 <div id="spedytor-dashboard">
 
+    <div id="spedytor-dashboard">
     <div class="drivers-section">
-        <div class="available-drivers">
-            <h3>Dostępni kierowcy</h3>
-            <div class="drivers-grid">
-                <% freeDrivers.forEach(driver => { %>
-                    <div class="driver-card">
-                        <div class="driver-name"><%= driver.name %> <%= driver.surname %></div>
-                        <div class="status-indicator <%= driver.isOnline ? 'online' : 'offline' %>" 
-                             data-user-status="<%= driver._id %>">
-                            <%= driver.isOnline ? '🟢' : '🔴' %>
-                        </div>
-                        <form action="/api/job/invite-driver/<%= driver._id %>" method="POST">
-                            <button type="submit" class="btn-invite">Zaproś do zespołu</button>
-                        </form>
-                    </div>
-                <% }) %>
-            </div>
-        </div>
-
         <div class="managed-drivers">
-            <h3>Mój zespół</h3>
+            <div class="header">
+                <h3>Mój zespół</h3>
+                <a href="/dashboard/invite-driver" class="btn-expand-team">Powiększ zespół</a>
+            </div>
             <div class="drivers-grid">
                 <% managedDrivers.forEach(driver => { %>
                     <div class="driver-card">
@@ -71,12 +57,11 @@
                         </div>
                         <div class="status-indicator <%= driver.isOnline ? 'online' : 'offline' %>" 
                              data-user-status="<%= driver._id %>">
-                            <%= driver.isOnline ? '🟢' : '🔴' %>
+                            <%= driver.isOnline ? 'Dostępny(a)' : 'Niedostępny(a)' %>
                         </div>
                         <form action="/api/job/remove-driver/<%= driver._id %>" method="post">
-                            <button type="submit">Usuń kierowcę</button>
+                            <button type="submit" class="btn-remove">Usuń kierowcę</button>
                         </form>
-                        
                     </div>
                 <% }) %>
             </div>

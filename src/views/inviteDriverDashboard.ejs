@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invite Driver Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+<body>
+    <div id="invite-driver-dashboard">
+        <div id="search-drivers">
+            <input type="text" id="search-bar" placeholder="Szukaj kierowcy...">
+        </div>
+        <div id="drivers-list">
+            <table class="drivers-table">
+                <thead>
+                    <tr>
+                        <th>Imię</th>
+                        <th>Nazwisko</th>
+                        <th>Email</th>
+                        <th>Akcje</th>
+                    </tr>
+                </thead>
+                <tbody id="drivers-tbody">
+                    <% allDrivers.forEach(driver => { %>
+                        <tr>
+                            <td><%= driver.name %></td>
+                            <td><%= driver.surname %></td>
+                            <td><%= driver.email %></td>
+                            <td>
+                                <form action="/api/job/invite-driver/<%= driver._id %>" method="POST">
+                                    <button type="submit" class="btn-invite">Zaproś do zespołu</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        document.getElementById('search-bar').addEventListener('input', function() {
+            const searchValue = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#drivers-tbody tr');
+            rows.forEach(row => {
+                const name = row.children[0].textContent.toLowerCase();
+                const surname = row.children[1].textContent.toLowerCase();
+                const email = row.children[2].textContent.toLowerCase();
+                if (name.includes(searchValue) || surname.includes(searchValue) || email.includes(searchValue)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -344,3 +344,380 @@ $status-rejected: #fc8181;
     }
   }
 }
+
+
+#client-dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background: white;
+  border-radius: $border-radius;
+  box-shadow: 0 10px 20px $shadow-color;
+  max-width: 1200px;
+  margin: 2rem auto;
+
+  #add-job {
+    width: 100%;
+    margin-bottom: 2rem;
+
+    #add-job-form {
+      background: $secondary-color;
+      padding: 2rem;
+      border-radius: $border-radius;
+      box-shadow: 0 4px 6px $shadow-color;
+
+      .form-group {
+        margin-bottom: 1.5rem;
+
+        label {
+          display: block;
+          margin-bottom: 0.5rem;
+          font-weight: 500;
+          color: $text-dark;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        input[type="datetime-local"] {
+          width: 100%;
+          padding: 0.8rem;
+          border: 2px solid $table-border;
+          border-radius: $border-radius;
+          font-size: 1rem;
+          transition: $transition;
+
+          &:focus {
+            outline: none;
+            border-color: $primary-color;
+            box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+          }
+        }
+
+        .dimensions {
+          display: flex;
+          gap: 1rem;
+
+          input {
+            flex: 1;
+          }
+        }
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 1rem;
+        background-color: $primary-color;
+        color: white;
+        border: none;
+        border-radius: $border-radius;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: $transition;
+
+        &:hover {
+          background-color: darken($primary-color, 10%);
+          transform: translateY(-2px);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+      }
+    }
+  }
+
+  #client-jobs {
+    width: 100%;
+
+    .jobs-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: $border-radius;
+      overflow: hidden;
+      box-shadow: 0 4px 6px $shadow-color;
+
+      thead {
+        background: $secondary-color;
+
+        th {
+          padding: 1rem;
+          text-align: left;
+          font-weight: 600;
+          color: $text-dark;
+          border-bottom: 2px solid $table-border;
+        }
+      }
+
+      tbody {
+        tr {
+          border-bottom: 1px solid $table-border;
+          transition: $transition;
+
+          &:hover {
+            background: rgba($primary-color, 0.05);
+          }
+
+          td {
+            padding: 1rem;
+            color: $text-dark;
+
+            .delete-btn {
+              padding: 0.5rem 1rem;
+              background: $primary-color;
+              color: white;
+              border: none;
+              border-radius: $border-radius;
+              cursor: pointer;
+              transition: $transition;
+
+              &:hover {
+                background: darken($primary-color, 10%);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+#invite-driver-dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background: white;
+  border-radius: $border-radius;
+  box-shadow: 0 10px 20px $shadow-color;
+  max-width: 800px;
+  margin: 2rem auto;
+
+  #search-drivers {
+    width: 100%;
+    margin-bottom: 1.5rem;
+
+    input[type="text"] {
+      width: 100%;
+      padding: 0.8rem;
+      border: 2px solid $table-border;
+      border-radius: $border-radius;
+      font-size: 1rem;
+      transition: $transition;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+      }
+    }
+  }
+
+  #drivers-list {
+    width: 100%;
+
+    .drivers-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: $border-radius;
+      overflow: hidden;
+      box-shadow: 0 4px 6px $shadow-color;
+
+      thead {
+        background: $secondary-color;
+
+        th {
+          padding: 1rem;
+          text-align: left;
+          font-weight: 600;
+          color: $text-dark;
+          border-bottom: 2px solid $table-border;
+        }
+      }
+
+      tbody {
+        tr {
+          border-bottom: 1px solid $table-border;
+          transition: $transition;
+
+          &:hover {
+            background: rgba($primary-color, 0.05);
+          }
+
+          td {
+            padding: 1rem;
+            color: $text-dark;
+
+            .btn-invite {
+              padding: 0.5rem 1rem;
+              background: $primary-color;
+              color: white;
+              border: none;
+              border-radius: $border-radius;
+              cursor: pointer;
+              transition: $transition;
+
+              &:hover {
+                background: darken($primary-color, 10%);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+#spedytor-dashboard {
+  .drivers-section {
+    .managed-drivers {
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+
+        h3 {
+          font-size: 1.5rem;
+          color: $primary-color;
+        }
+
+        .btn-expand-team {
+          padding: 0.5rem 1rem;
+          background: $primary-color;
+          color: white;
+          border: none;
+          border-radius: $border-radius;
+          text-decoration: none;
+          cursor: pointer;
+          transition: $transition;
+          font-size: 1rem;
+          font-weight: 600;
+          box-shadow: 0 4px 6px $shadow-color;
+
+          &:hover {
+            background: darken($primary-color, 10%);
+          }
+        }
+      }
+
+      .drivers-grid {
+        display: flex;
+        overflow-x: auto;
+        gap: 1rem;
+        padding-bottom: 1rem;
+
+        .driver-card {
+          background: $secondary-color;
+          padding: 1rem;
+          border-radius: $border-radius;
+          box-shadow: 0 4px 6px $shadow-color;
+          min-width: 200px;
+          flex-shrink: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+
+          .driver-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+          }
+
+          .status-indicator {
+            margin-bottom: 0.5rem;
+            font-size: 0.8rem;
+
+            &.online {
+              color: green;
+            }
+
+            &.offline {
+              color: red;
+            }
+          }
+
+          .btn-remove {
+            padding: 0.5rem 1rem;
+            background: $primary-color;
+            color: white;
+            border: none;
+            border-radius: $border-radius;
+            cursor: pointer;
+            transition: $transition;
+
+            &:hover {
+              background: darken($primary-color, 10%);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+.invitations-section {
+  margin-top: 2rem;
+
+  h3 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: $primary-color;
+  }
+
+  .invitation-card {
+    background: $secondary-color;
+    padding: 1rem;
+    border-radius: $border-radius;
+    box-shadow: 0 4px 6px $shadow-color;
+    margin-bottom: 1rem;
+
+    p {
+      margin: 0 0 1rem 0;
+      font-size: 1rem;
+      color: $text-dark;
+    }
+
+    .invitation-actions {
+      display: flex;
+      gap: 1rem;
+
+      .btn-accept,
+      .btn-reject {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: $border-radius;
+        cursor: pointer;
+        transition: $transition;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      .btn-accept {
+        background: $primary-color;
+        color: white;
+
+        &:hover {
+          background: darken($primary-color, 10%);
+        }
+      }
+
+      .btn-reject {
+        background: $status-rejected;
+        color: white;
+
+        &:hover {
+          background: darken($status-rejected, 10%);
+        }
+      }
+    }
+  }
+}

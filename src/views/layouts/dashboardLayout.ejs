@@ -45,38 +45,36 @@
 
             // KIEROWCA
             if (userRole === 'kierowca') {
-                // Jeśli otrzyma nowe zaproszenie to ma się dodać
-                socket.on('new_invitation', (data) => {
-                    const invitationsList = document.querySelector('.invitations-section');
-                    if (invitationsList) {
-                        // Skasowanie komunikatu o tym, że nie ma zaproszeń
-                        const noInvitationsMsg = invitationsList.querySelector('p');
-                        if (noInvitationsMsg) {
-                            noInvitationsMsg.remove();
-                        }
-
-                        const newInvitation = `
-                            <div class="invitation-card">
-                                <p>Spedytor: ${data.spedytorEmail}</p>
-                                <div class="invitation-actions">
-                                    <form action="/api/job/respond-invitation/${data.invitation._id}" method="POST" style="display: inline;">
-                                        <input type="hidden" name="response" value="accept">
-                                        <button type="submit" class="btn-accept">Akceptuj</button>
-                                    </form>
-                                    <form action="/api/job/respond-invitation/${data.invitation._id}" method="POST" style="display: inline;">
-                                        <input type="hidden" name="response" value="reject">
-                                        <button type="submit" class="btn-reject">Odrzuć</button>
-                                    </form>
-                                </div>
-                            </div>
-                        `;
-                        invitationsList.insertAdjacentHTML('afterbegin', newInvitation);
-                        console.log('New invitation added to DOM');
-                    } else {
-                        console.error('Invitations section not found');
+            // Jeśli otrzyma nowe zaproszenie to ma się dodać
+            socket.on('new_invitation', (data) => {
+                const invitationsList = document.querySelector('.invitations-section');
+                if (invitationsList) {
+                    // Skasowanie komunikatu o tym, że nie ma zaproszeń
+                    const noInvitationsMsg = invitationsList.querySelector('p');
+                    if (noInvitationsMsg) {
+                        noInvitationsMsg.remove();
                     }
-                });
+
+                    const newInvitation = `
+                        <div class="invitation-card">
+                            <p>Spedytor: ${data.spedytorEmail}</p>
+                            <div class="invitation-actions">
+                                <form action="/api/job/respond-invitation/${data.invitation._id}" method="POST" style="display: inline;">
+                                    <input type="hidden" name="response" value="accept">
+                                    <button type="submit" class="btn-accept">Akceptuj</button>
+                                </form>
+                                <form action="/api/job/respond-invitation/${data.invitation._id}" method="POST" style="display: inline;">
+                                    <input type="hidden" name="response" value="reject">
+                                    <button type="submit" class="btn-reject">Odrzuć</button>
+                                </form>
+                            </div>
+                        </div>
+                    `;
+                    invitationsList.insertAdjacentHTML('beforeend', newInvitation);
+                }
+            });
             }
+                
 
             // SPEDYTOR
             if (userRole === 'spedytor') {

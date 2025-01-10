@@ -38,6 +38,9 @@ router.get('/', auth ,async (req, res) => {
                     headers: { Cookie: `auth_token=${req.cookies.auth_token}` }
                 })
             ]);
+
+            console.log(req.user);
+            
             
             res.render('spedytorDashboard', {
                 layout: 'layouts/dashboardLayout',
@@ -69,5 +72,25 @@ router.get('/', auth ,async (req, res) => {
     }
    
 });
+
+
+router.get('/invite-driver', auth, async (req, res) => {
+    
+    try {
+        if ( req.user.role === 'spedytor') {
+
+            const allDriversResponse = await axios.get('http://localhost:3000/api/job/drivers', {
+                headers: { Cookie: `auth_token=${req.cookies.auth_token}` }
+            })
+
+            res.render('inviteDriverDashboard', {
+                user: req.user,
+                allDrivers: allDriversResponse.data
+            })
+        }
+    } catch (error) {
+        
+    }
+})
 
 module.exports = router;
