@@ -38,7 +38,7 @@
             socket.on('status_update', ({ userId, isOnline }) => {
                 const statusElements = document.querySelectorAll(`[data-user-status="${userId}"]`);
                 statusElements.forEach(element => {
-                    element.textContent = isOnline ? '🟢' : '🔴';
+                    element.textContent = isOnline ? 'Dostępny(a)' : 'Niedostępny(a)';
                     element.className = `status-indicator ${isOnline ? 'online' : 'offline'}`;
                 });
             });

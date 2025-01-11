@@ -635,11 +635,14 @@ $status-rejected: #fc8181;
             font-size: 0.8rem;
 
             &.online {
-              color: green;
+              background: rgba($status-accepted, 0.1);
+              color: $status-accepted;
+              
             }
 
             &.offline {
-              color: red;
+              background: rgba($status-rejected, 0.1);
+              color: $status-rejected;
             }
           }
 
@@ -663,59 +666,159 @@ $status-rejected: #fc8181;
 }
 
 
+#driver-dashboard {
+  .drivers-section,
+  .assigned-jobs-section {
+    margin-top: 2rem;
+    
+    .managed-by,
+    .jobs-container {
 
-.invitations-section {
-  margin-top: 2rem;
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
 
-  h3 {
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
-    color: $primary-color;
-  }
-
-  .invitation-card {
-    background: $secondary-color;
-    padding: 1rem;
-    border-radius: $border-radius;
-    box-shadow: 0 4px 6px $shadow-color;
-    margin-bottom: 1rem;
-
-    p {
-      margin: 0 0 1rem 0;
-      font-size: 1rem;
-      color: $text-dark;
-    }
-
-    .invitation-actions {
-      display: flex;
-      gap: 1rem;
-
-      .btn-accept,
-      .btn-reject {
-        padding: 0.5rem 1rem;
-        border: none;
-        border-radius: $border-radius;
-        cursor: pointer;
-        transition: $transition;
-        font-size: 1rem;
-        font-weight: 600;
-      }
-
-      .btn-accept {
-        background: $primary-color;
-        color: white;
-
-        &:hover {
-          background: darken($primary-color, 10%);
+        h3 {
+          font-size: 1.5rem;
+          color: $primary-color;
+          margin: 0;
         }
       }
+    }
 
-      .btn-reject {
-        background: $status-rejected;
-        color: white;
+    // Grid layout for both sections
+    .spedytors-grid,
+    .jobs-grid {
+      display: flex;
+      overflow-x: auto;
+      gap: 1rem;
+      padding-bottom: 1rem;
 
-        &:hover {
-          background: darken($status-rejected, 10%);
+      &::-webkit-scrollbar {
+        height: 8px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: $secondary-color;
+        border-radius: 4px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: $primary-color;
+        border-radius: 4px;
+      }
+    }
+
+    // Card styles for both sections
+    .spedytor-card,
+    .job-card {
+      background: $secondary-color;
+      padding: 1.5rem;
+      border-radius: $border-radius;
+      box-shadow: 0 2px 4px $shadow-color;
+      min-width: 250px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+
+      .name,
+      .job-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: $text-dark;
+      }
+
+      .email,
+      .job-details {
+        font-size: 0.9rem;
+        color: $text-dark;
+        opacity: 0.8;
+      }
+
+      .status-indicator {
+        padding: 0.4rem 0.8rem;
+        border-radius: 1rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+
+        &.online,
+        &.active {
+          background: rgba($status-accepted, 0.1);
+          color: $status-accepted;
+        }
+
+        &.offline,
+        &.inactive {
+          background: rgba($status-rejected, 0.1);
+          color: $status-rejected;
+        }
+      }
+    }
+  }
+
+  .invitations-section {
+    margin-top: 2rem;
+    padding: 1.5rem 0;
+  
+    .invitation-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: $border-radius;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 4px $shadow-color;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+  
+      p {
+        font-size: 1.1rem;
+        color: $text-dark;
+        margin: 0;
+        text-align: center;
+      }
+  
+      .invitation-actions {
+        display: flex;
+        gap: 0.8rem;
+        justify-content: center;
+        width: 100%;
+  
+        form {
+          flex: 1;
+          max-width: 150px;
+        }
+  
+        button {
+          width: 100%;
+          padding: 0.6rem 1.2rem;
+          border: none;
+          border-radius: $border-radius;
+          font-weight: 500;
+          cursor: pointer;
+          transition: $transition;
+  
+          &.btn-accept {
+            background: $status-accepted;
+            color: white;
+  
+            &:hover {
+              background: darken($status-accepted, 10%);
+            }
+          }
+  
+          &.btn-reject {
+            background: $status-rejected;
+            color: white;
+  
+            &:hover {
+              background: darken($status-rejected, 10%);
+            }
+          }
         }
       }
     }

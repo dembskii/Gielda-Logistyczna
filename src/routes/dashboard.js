@@ -14,13 +14,21 @@ router.get('/', auth ,async (req, res) => {
                     path: 'pendingInvitations',
                     populate: {
                         path: 'spedytorId',
-                        select: 'email'
+                        select: 'name surname'
                     }
-                });
+                })
+                .populate('spedytorIds', 'name surname email isOnline');
+
+            const assingedJobsResponse = await axios.get('http://localhost:3000/api/job/assigned-jobs', {
+                headers: { Cookie: `auth_token=${req.cookies.auth_token}` }
+                })
+        
+            
 
             res.render('driverDashboard', {
                 layout: 'layouts/dashboardLayout',
-                user: user
+                user: user,
+                assignedJobs: assingedJobsResponse.data,
             });
         } else if ( req.user.role === 'spedytor') { // Spedytor
 

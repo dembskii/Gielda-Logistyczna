@@ -541,10 +541,12 @@ body {
   font-size: 0.8rem;
 }
 #spedytor-dashboard .drivers-section .managed-drivers .drivers-grid .driver-card .status-indicator.online {
-  color: green;
+  background: rgba(104, 211, 145, 0.1);
+  color: #68d391;
 }
 #spedytor-dashboard .drivers-section .managed-drivers .drivers-grid .driver-card .status-indicator.offline {
-  color: red;
+  background: rgba(252, 129, 129, 0.1);
+  color: #fc8181;
 }
 #spedytor-dashboard .drivers-section .managed-drivers .drivers-grid .driver-card .btn-remove {
   padding: 0.5rem 1rem;
@@ -559,51 +561,175 @@ body {
   background: #2275d7;
 }
 
-.invitations-section {
+#driver-dashboard .drivers-section,
+#driver-dashboard .assigned-jobs-section {
   margin-top: 2rem;
 }
-.invitations-section h3 {
-  margin-bottom: 1rem;
+#driver-dashboard .drivers-section .managed-by .header,
+#driver-dashboard .drivers-section .jobs-container .header,
+#driver-dashboard .assigned-jobs-section .managed-by .header,
+#driver-dashboard .assigned-jobs-section .jobs-container .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+#driver-dashboard .drivers-section .managed-by .header h3,
+#driver-dashboard .drivers-section .jobs-container .header h3,
+#driver-dashboard .assigned-jobs-section .managed-by .header h3,
+#driver-dashboard .assigned-jobs-section .jobs-container .header h3 {
   font-size: 1.5rem;
   color: #4a90e2;
+  margin: 0;
 }
-.invitations-section .invitation-card {
+#driver-dashboard .drivers-section .spedytors-grid,
+#driver-dashboard .drivers-section .jobs-grid,
+#driver-dashboard .assigned-jobs-section .spedytors-grid,
+#driver-dashboard .assigned-jobs-section .jobs-grid {
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  padding-bottom: 1rem;
+}
+#driver-dashboard .drivers-section .spedytors-grid::-webkit-scrollbar,
+#driver-dashboard .drivers-section .jobs-grid::-webkit-scrollbar,
+#driver-dashboard .assigned-jobs-section .spedytors-grid::-webkit-scrollbar,
+#driver-dashboard .assigned-jobs-section .jobs-grid::-webkit-scrollbar {
+  height: 8px;
+}
+#driver-dashboard .drivers-section .spedytors-grid::-webkit-scrollbar-track,
+#driver-dashboard .drivers-section .jobs-grid::-webkit-scrollbar-track,
+#driver-dashboard .assigned-jobs-section .spedytors-grid::-webkit-scrollbar-track,
+#driver-dashboard .assigned-jobs-section .jobs-grid::-webkit-scrollbar-track {
   background: #f5f5f5;
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 1rem;
+  border-radius: 4px;
 }
-.invitations-section .invitation-card p {
-  margin: 0 0 1rem 0;
-  font-size: 1rem;
+#driver-dashboard .drivers-section .spedytors-grid::-webkit-scrollbar-thumb,
+#driver-dashboard .drivers-section .jobs-grid::-webkit-scrollbar-thumb,
+#driver-dashboard .assigned-jobs-section .spedytors-grid::-webkit-scrollbar-thumb,
+#driver-dashboard .assigned-jobs-section .jobs-grid::-webkit-scrollbar-thumb {
+  background: #4a90e2;
+  border-radius: 4px;
+}
+#driver-dashboard .drivers-section .spedytor-card,
+#driver-dashboard .drivers-section .job-card,
+#driver-dashboard .assigned-jobs-section .spedytor-card,
+#driver-dashboard .assigned-jobs-section .job-card {
+  background: #f5f5f5;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 250px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+#driver-dashboard .drivers-section .spedytor-card .name,
+#driver-dashboard .drivers-section .spedytor-card .job-title,
+#driver-dashboard .drivers-section .job-card .name,
+#driver-dashboard .drivers-section .job-card .job-title,
+#driver-dashboard .assigned-jobs-section .spedytor-card .name,
+#driver-dashboard .assigned-jobs-section .spedytor-card .job-title,
+#driver-dashboard .assigned-jobs-section .job-card .name,
+#driver-dashboard .assigned-jobs-section .job-card .job-title {
+  font-size: 1.2rem;
+  font-weight: 600;
   color: #2d3748;
 }
-.invitations-section .invitation-card .invitation-actions {
+#driver-dashboard .drivers-section .spedytor-card .email,
+#driver-dashboard .drivers-section .spedytor-card .job-details,
+#driver-dashboard .drivers-section .job-card .email,
+#driver-dashboard .drivers-section .job-card .job-details,
+#driver-dashboard .assigned-jobs-section .spedytor-card .email,
+#driver-dashboard .assigned-jobs-section .spedytor-card .job-details,
+#driver-dashboard .assigned-jobs-section .job-card .email,
+#driver-dashboard .assigned-jobs-section .job-card .job-details {
+  font-size: 0.9rem;
+  color: #2d3748;
+  opacity: 0.8;
+}
+#driver-dashboard .drivers-section .spedytor-card .status-indicator,
+#driver-dashboard .drivers-section .job-card .status-indicator,
+#driver-dashboard .assigned-jobs-section .spedytor-card .status-indicator,
+#driver-dashboard .assigned-jobs-section .job-card .status-indicator {
+  padding: 0.4rem 0.8rem;
+  border-radius: 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+#driver-dashboard .drivers-section .spedytor-card .status-indicator.online, #driver-dashboard .drivers-section .spedytor-card .status-indicator.active,
+#driver-dashboard .drivers-section .job-card .status-indicator.online,
+#driver-dashboard .drivers-section .job-card .status-indicator.active,
+#driver-dashboard .assigned-jobs-section .spedytor-card .status-indicator.online,
+#driver-dashboard .assigned-jobs-section .spedytor-card .status-indicator.active,
+#driver-dashboard .assigned-jobs-section .job-card .status-indicator.online,
+#driver-dashboard .assigned-jobs-section .job-card .status-indicator.active {
+  background: rgba(104, 211, 145, 0.1);
+  color: #68d391;
+}
+#driver-dashboard .drivers-section .spedytor-card .status-indicator.offline, #driver-dashboard .drivers-section .spedytor-card .status-indicator.inactive,
+#driver-dashboard .drivers-section .job-card .status-indicator.offline,
+#driver-dashboard .drivers-section .job-card .status-indicator.inactive,
+#driver-dashboard .assigned-jobs-section .spedytor-card .status-indicator.offline,
+#driver-dashboard .assigned-jobs-section .spedytor-card .status-indicator.inactive,
+#driver-dashboard .assigned-jobs-section .job-card .status-indicator.offline,
+#driver-dashboard .assigned-jobs-section .job-card .status-indicator.inactive {
+  background: rgba(252, 129, 129, 0.1);
+  color: #fc8181;
+}
+#driver-dashboard .invitations-section {
+  margin-top: 2rem;
+  padding: 1.5rem 0;
+}
+#driver-dashboard .invitations-section .invitation-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 1rem;
 }
-.invitations-section .invitation-card .invitation-actions .btn-accept,
-.invitations-section .invitation-card .invitation-actions .btn-reject {
-  padding: 0.5rem 1rem;
+#driver-dashboard .invitations-section .invitation-card p {
+  font-size: 1.1rem;
+  color: #2d3748;
+  margin: 0;
+  text-align: center;
+}
+#driver-dashboard .invitations-section .invitation-card .invitation-actions {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+  width: 100%;
+}
+#driver-dashboard .invitations-section .invitation-card .invitation-actions form {
+  flex: 1;
+  max-width: 150px;
+}
+#driver-dashboard .invitations-section .invitation-card .invitation-actions button {
+  width: 100%;
+  padding: 0.6rem 1.2rem;
   border: none;
   border-radius: 8px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 1rem;
-  font-weight: 600;
 }
-.invitations-section .invitation-card .invitation-actions .btn-accept {
-  background: #4a90e2;
+#driver-dashboard .invitations-section .invitation-card .invitation-actions button.btn-accept {
+  background: #68d391;
   color: white;
 }
-.invitations-section .invitation-card .invitation-actions .btn-accept:hover {
-  background: #2275d7;
+#driver-dashboard .invitations-section .invitation-card .invitation-actions button.btn-accept:hover {
+  background: #41c774;
 }
-.invitations-section .invitation-card .invitation-actions .btn-reject {
+#driver-dashboard .invitations-section .invitation-card .invitation-actions button.btn-reject {
   background: #fc8181;
   color: white;
 }
-.invitations-section .invitation-card .invitation-actions .btn-reject:hover {
+#driver-dashboard .invitations-section .invitation-card .invitation-actions button.btn-reject:hover {
   background: #fb4f4f;
 }/*# sourceMappingURL=style.css.map */

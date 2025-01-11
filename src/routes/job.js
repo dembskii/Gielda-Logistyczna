@@ -306,5 +306,19 @@ router.post('/assign-driver/:driverId/:jobId', auth ,async (req, res) => {
     res.json(''),200
 })
 
+// Pobiera przypisane do kierowcy zlecenia
+router.get('/assigned-jobs', auth, async (req, res) => {
+    
+    if (req.user.role === 'kierowca') {
+        const assignedJobs = await Job.find({
+            driverId: req.user.id
+        })
+        res.status(200).json(assignedJobs)
+
+        
+    } 
+})
+
+
 module.exports = router;
 
