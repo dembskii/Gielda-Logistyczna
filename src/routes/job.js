@@ -184,7 +184,7 @@ router.post('/invite-driver/:driverId', auth, async (req, res) => {
         await invitation.save();
 
         // Zapełnianie zaproszenia danymi przed wysłaniem
-        await invitation.populate('spedytorId', 'email');
+        await invitation.populate('spedytorId', 'name surname email');
         
         // Dodanie zaproszenia do bieżących zaproszeń - to w przypadku gdy jest offline
         await User.findByIdAndUpdate(driver._id, {
@@ -199,7 +199,10 @@ router.post('/invite-driver/:driverId', auth, async (req, res) => {
                 _id: invitation._id,
                 spedytorId: invitation.spedytorId
             },
-            spedytorEmail: req.user.email
+            spedytorEmail: req.user.email,
+            spedytorName: req.user.name,
+            spedytorSurname: req.user.surname
+
         });
         
 
@@ -279,6 +282,16 @@ router.post('/respond-invitation/:invitationId', auth, async (req, res) => {
                 driverEmail: req.user.email
             });
 
+        } else {
+            // Skasowanie zaproszenia
+            await User.findByIdAndUpdate(req.user.id, {
+                $pull: { pendingInvitations: invitation._id }
+            });
+
+            global.io.to(invitation.spedytorId._id.toString()).emit('driver_rejected', {
+                driverId: req.user.id,
+                driverEmail: req.user.email
+            });
         }
 
         return res.redirect('/dashboard');
