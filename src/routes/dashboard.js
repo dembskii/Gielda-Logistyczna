@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const {auth} = require('../authMiddleware')
 const axios = require('axios');
-const User = require('../models/User')
+const User = require('../models/User');
+const Job = require('../models/Job');
 
 router.get('/', auth ,async (req, res) => {
     try {
@@ -100,5 +101,30 @@ router.get('/invite-driver', auth, async (req, res) => {
         
     }
 })
+
+router.get('/update-job', auth, async (req, res) => {
+    try {
+        if (req.user.role === 'kierowca') {
+            const jobId = req.query.jobId;
+
+            job = await Job.findOne({
+                _id:jobId
+            })
+            
+            if (!job) {
+                return res.status(400).json("Nie istnieje takie zlecenie")
+            }
+            
+            res.render('driverUpdateJob', {
+                layout: 'layouts/dashboardLayout',
+                user: req.user,
+                job: job
+            });
+        }
+    } catch (error) {
+        console.error('Error loading job update page:', error);
+        res.status(500).send('Error loading job update page');
+    }
+});
 
 module.exports = router;

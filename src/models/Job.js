@@ -36,7 +36,17 @@ const jobSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['active', 'assigned', 'completed', 'cancelled'],
+        enum: [
+            'active',             
+            'assigned',           
+            'heading_to_pickup',  
+            'waiting_for_pickup', 
+            'picked_up',         
+            'in_transit',        
+            'at_delivery',       
+            'delivered',         
+            'cancelled'          
+        ],
         default: 'active'
     },
     spedytorId: {

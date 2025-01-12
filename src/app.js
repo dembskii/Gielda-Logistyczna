@@ -26,6 +26,8 @@ mongoose.connect(process.env.MONGODB_URI)
     .catch(err => console.error('MongoDB connection error:', err));
 
 
+
+
 // Ustawienie EJS
 app.set('view engine', 'ejs');
 

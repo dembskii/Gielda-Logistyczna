@@ -1,0 +1,33 @@
+<div class="update-job-form">
+    <h2>Aktualizacja statusu zlecenia</h2>
+    <form action="/api/job/update-job-status" method="POST">
+        <input type="hidden" name="jobId" value="<%= job._id %>">
+        
+        <div class="form-group">
+            <label for="status">Status:</label>
+            <select name="status" id="status" required>
+                <option value="assigned" <%= job.status === 'assigned' ? 'selected' : '' %>>Przypisane</option>
+                <option value="heading_to_pickup" <%= job.status === 'heading_to_pickup' ? 'selected' : '' %>>W drodze do miejsca odbioru</option>
+                <option value="waiting_for_pickup" <%= job.status === 'waiting_for_pickup' ? 'selected' : '' %>>Oczekiwanie na odbiór</option>
+                <option value="picked_up" <%= job.status === 'picked_up' ? 'selected' : '' %>>Towar odebrany</option>
+                <option value="in_transit" <%= job.status === 'in_transit' ? 'selected' : '' %>>W trasie</option>
+                <option value="at_delivery" <%= job.status === 'at_delivery' ? 'selected' : '' %>>Dotarł do miejsca dostawy</option>
+                <option value="delivered" <%= job.status === 'delivered' ? 'selected' : '' %>>Dostarczono</option>
+                <option value="cancelled" <%= job.status === 'cancelled' ? 'selected' : '' %>>Anulowane</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="message">Dodatkowa wiadomość:</label>
+            <textarea name="message" id="message" rows="4" placeholder="Opcjonalna wiadomość..."></textarea>
+        </div>
+
+        <div class="job-details">
+            <p><strong>Obecny status:</strong> <%= job.status %></p>
+            <p><strong>Adres odbioru:</strong> <%= job.pickup.address %></p>
+            <p><strong>Adres dostawy:</strong> <%= job.delivery.address %></p>
+        </div>
+
+        <button type="submit" class="btn-submit">Zaktualizuj status</button>
+    </form>
+</div>

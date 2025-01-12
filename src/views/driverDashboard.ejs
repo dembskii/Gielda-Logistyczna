@@ -61,6 +61,7 @@
                         <th>Data dostawy</th>
                         <th>Odległość</th>
                         <th>Status</th>
+                        <th>Akcje</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -75,6 +76,12 @@
                             <td><%= new Date(job.delivery.date).toLocaleString() %></td>
                             <td><%= job.distance %> km</td>
                             <td class="status-<%= job.status %>"><%= job.status %></td>
+                            <td>
+                                <form action="/dashboard/update-job" method="GET">
+                                    <input type="hidden" name="jobId" value="<%= job._id %>">
+                                    <button type="submit" class="btn-update">Aktualizuj status</button>
+                                </form>
+                            </td>
                         </tr>
                     <% }) %>
                 </tbody>

@@ -4,6 +4,7 @@ const Job = require('../models/Job');
 const {auth} = require('../authMiddleware')
 const User = require('../models/User')
 const Invitation = require('../models/Invitation')
+const mqttClient = require('../services/mqttService')
 
 
 
@@ -43,6 +44,16 @@ router.post('/remove-job/:id', auth, async (req, res) => {
 
         if (!job) {
             return res.status(404).json({ error: 'Zlecenie nie znalezione' });
+        }
+        // Sprawdzanie czy jest conajmniej 12H przed odbiorem (jeśli jest już przyjęte)
+        const currentTime = new Date();
+        const pickupTime = new Date(job.pickup.date);
+        const hoursBeforePickup = (pickupTime - currentTime) / (1000 * 60 * 60);
+
+        if (hoursBeforePickup < 12 && job.status !== 'active') {
+            return res.status(400).json({
+                error: "Nie można już usunąć zlecenia, zostało mniej niż 12h a zlecenie jest już przyjęta"
+            })
         }
 
         await job.deleteOne();
@@ -332,6 +343,60 @@ router.get('/assigned-jobs', auth, async (req, res) => {
     } 
 })
 
+
+// Aktualizowanie statusu przez kierowce
+router.post('/update-job-status', auth, async (req, res) => {
+    try {
+        
+        if (req.user.role !== 'kierowca') {
+            return res.status(403).json({ message: 'Tylko kierowca może aktualizować status zlecenia' });
+        }
+
+        const { jobId, status, message } = req.body;
+
+        
+        const job = await Job.findById(jobId);
+        if (!job) {
+            return res.status(404).json({ message: 'Nie znaleziono zlecenia' });
+        }
+
+        // Sprawdzanie czy kierowca jest przypisany do zlecenia
+        if (job.driverId.toString() !== req.user.id) {
+            return res.status(403).json({ message: 'Nie jesteś przypisany do tego zlecenia' });
+        }
+
+        // Ustalenie jakie statusy może ustawić w zależności od aktualnego
+        const validTransitions = {
+            'assigned': ['heading_to_pickup', 'cancelled'],
+            'heading_to_pickup': ['waiting_for_pickup', 'cancelled'],
+            'waiting_for_pickup': ['picked_up', 'cancelled'],
+            'picked_up': ['in_transit', 'cancelled'],
+            'in_transit': ['in_transit','at_delivery', 'cancelled'], // In transit jest po to, że jakby chciał message samo wysłać
+            'at_delivery': ['delivered', 'cancelled'],
+            'delivered': [],
+            'cancelled': []
+        };
+
+        // Sprawdzenie czy się zgadza z założeniami
+        if (!validTransitions[job.status].includes(status)) {
+            return res.status(400).json({ 
+                message: 'Nieprawidłowa zmiana statusu',
+                currentStatus: job.status,
+                allowedTransitions: validTransitions[job.status]
+            });
+        }
+
+        // Akutalizacja
+        job.status = status;
+        await job.save();
+        mqttClient.publish(`jobs/${jobId}/status`,JSON.stringify({status}))
+        res.redirect('/dashboard')
+
+    } catch (error) {
+        console.error('Job status update error:', error);
+        res.status(500).json({ message: 'Błąd podczas aktualizacji statusu zlecenia' });
+    }
+});
 
 module.exports = router;
 
