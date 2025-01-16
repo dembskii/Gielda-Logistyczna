@@ -389,7 +389,8 @@ router.post('/update-job-status', auth, async (req, res) => {
         // Akutalizacja
         job.status = status;
         await job.save();
-        mqttClient.publish(`jobs/${jobId}/status`,JSON.stringify({status}))
+        mqttClient.publish(`${jobId}`,JSON.stringify({status}))
+        
         res.redirect('/dashboard')
 
     } catch (error) {

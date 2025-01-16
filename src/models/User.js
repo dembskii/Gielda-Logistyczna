@@ -16,8 +16,13 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Invitation',
         
+    }],
+    subscribedUrls: [{
+        type: String,
+        default: []
     }]
 });
+
 // Przerobić potem żeby hashowanie było client side
 userSchema.pre('save', async function(next) {
     if (this.isModified('password')) {

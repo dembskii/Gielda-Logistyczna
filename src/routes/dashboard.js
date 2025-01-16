@@ -48,7 +48,6 @@ router.get('/', auth ,async (req, res) => {
                 })
             ]);
 
-            console.log(req.user);
             
             
             res.render('spedytorDashboard', {
@@ -66,13 +65,17 @@ router.get('/', auth ,async (req, res) => {
                         Cookie: `auth_token=${req.cookies.auth_token}`
                     }
                 });
-                
-                res.render('clientDashboard', {
-    
-                    layout: 'layouts/dashboardLayout',
-                    jobs: response.data,
-                    user:req.user
-                });
+
+            const user = await User.findById(req.user.id)
+            .populate('subscribedUrls')
+            
+            
+            res.render('clientDashboard', {
+
+                layout: 'layouts/dashboardLayout',
+                jobs: response.data,
+                user:user
+            });
         }
     
     } catch (error) {

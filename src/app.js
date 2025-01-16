@@ -18,6 +18,7 @@ const indexRouter = require('./routes/index.js');
 const authRouter = require('./routes/auth');
 const dashboardRouter = require('./routes/dashboard.js')
 const jobRouter = require('./routes/job.js')
+const subscriptionsRouter = require('./routes/subscriptions.js')
 
 
 // Łączenie z bazą danych
@@ -51,6 +52,7 @@ app.use(cookieParser());
 app.use('/', indexRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/job', jobRouter);
+app.use('/api/subscriptions',subscriptionsRouter)
 app.use('/dashboard',dashboardRouter);
 
 

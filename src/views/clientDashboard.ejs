@@ -60,7 +60,7 @@
             </div>
         </div>
         <div id="client-jobs">
-            <table class="jobs-table">
+            <table>
                 <thead>
                     <tr>
                         <th>Cena</th>
@@ -70,7 +70,7 @@
                         <th>Data odbioru</th>
                         <th>Adres dostawy</th>
                         <th>Data dostawy</th>
-                        <th>Odległość</th>
+                        <th>Dystans</th>
                         <th>Status</th>
                         <th>Data utworzenia</th>
                         <th>Kierowca</th>
@@ -101,6 +101,24 @@
                                 <form action="/api/job/remove-job/<%= job._id %>" method="POST" style="margin: 0;">
                                     <button type="submit" class="delete-btn">Usuń zlecenie</button>
                                 </form>
+                                <% const isSubscribed = user.subscribedUrls && user.subscribedUrls.includes(job._id.toString()); %>
+                                <% if (isSubscribed) { %>
+                                    <button 
+                                        class="sub-btn subscribed"
+                                        data-job-id="<%= job._id %>"
+                                        onclick="unsubscribe('<%= job._id %>')"
+                                    >
+                                        Odsubskrybuj
+                                    </button>
+                                <% } else { %>
+                                    <button 
+                                        class="sub-btn"
+                                        data-job-id="<%= job._id %>"
+                                        onclick="subscribe('<%= job._id %>')"
+                                    >
+                                        Subskrybuj
+                                    </button>
+                                <% } %>
                             </td>
                         </tr>
                     <% }); %>
