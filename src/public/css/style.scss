@@ -824,3 +824,18 @@ $status-rejected: #fc8181;
     }
   }
 }
+
+.popup-message {
+  background: #333;
+  color: white;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 5px;
+  max-width: 300px;
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

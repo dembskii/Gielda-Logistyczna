@@ -33,6 +33,21 @@ async function unsubscribe(path) {
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    function createPopup(message) {
+        const container = document.getElementById('popup-container');
+        const popup = document.createElement('div');
+        popup.className = 'popup-message';
+        popup.textContent = message;
+    
+        container.appendChild(popup);
+    
+        setTimeout(() => {
+            popup.style.opacity = '0';
+            popup.style.transition = 'opacity 0.3s';
+            setTimeout(() => popup.remove(), 300);
+        }, 5000);
+    }
+
     // Konfiguracja klienta MQTT
  const mqttConfig = {
      clientId: 'webclient_' + Math.random().toString(16).substr(2, 8),
@@ -69,13 +84,12 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     
     });
-
-    // Load subscribed paths
-    console.log(window.subscribedUrls);
     
 
     client.on('message', (topic, message) => {
         console.log('Received:', topic, message.toString());
+        const data = JSON.parse(message.toString());
+        createPopup(`Status zlecenia ${topic.split('/')[1]} zmieniony na: ${data.status}`);
     });
 
 
