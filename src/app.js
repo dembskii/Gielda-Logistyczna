@@ -51,9 +51,11 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Podlinkowanie plików statycznych
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/favicon', express.static(path.join(__dirname, 'public/favicon')));
 
 // Ciasteczka
 app.use(cookieParser());
+
 
 
 // Router
