@@ -110,6 +110,7 @@ router.get('/accepted-jobs', auth, async (req, res) => {
         })
         .populate('userId', 'email')
         .populate('spedytorId', 'email')
+        .populate('driverId', 'name surname')
         .sort({ createdAt: -1 });
 
         res.json(jobs);
@@ -316,13 +317,14 @@ router.post('/respond-invitation/:invitationId', auth, async (req, res) => {
 router.post('/assign-driver/:driverId/:jobId', auth ,async (req, res) => {
 
     // Przypisanie kierowcy do zlecenia
-    await Job.findOneAndUpdate({
-        _id:req.params.jobId,
-        spedytorId : req.user.id,
-    },
-    {
-        $set: {
-            driverId: req.params.driverId
+    await Job.findOneAndUpdate(
+        {
+            _id: req.params.jobId,
+            spedytorId: req.user.id,
+        },
+        {
+            $set: {
+                driverId: req.params.driverId
             }
         }
     )

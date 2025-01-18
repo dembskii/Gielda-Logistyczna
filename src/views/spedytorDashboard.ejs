@@ -102,12 +102,23 @@
                     <td><%= new Date(job.createdAt).toLocaleString() %></td>
                     <td>
                         <select id="driverSelect_<%= job._id %>" name="driverId" required>
-                            <option value="">Wybierz kierowcę</option>
-                            <% managedDrivers.forEach(driver => { %>
-                                <option value="<%= driver._id %>">
-                                    <%= driver.name %> <%= driver.surname %>
+                            <%# Default option - current driver or "Wybierz kierowcę" %>
+                            <% if (job.driverId ) { %>
+                                <option value="<%= job.driverId._id %>" selected>
+                                    <%= job.driverId.name %> <%= job.driverId.surname %> (obecnie przypisany)
                                 </option>
-                            <% }); %>
+                            <% } else { %>
+                                <option value="" selected>Wybierz kierowcę</option>
+                            <% } %>
+                            
+                            <%# List all available drivers except current one %>
+                            <% managedDrivers.forEach(driver => { 
+                                if (driver && driver._id && (!job.driverId || !job.driverId._id || 
+                                    driver._id.toString() !== job.driverId._id.toString())) { %>
+                                    <option value="<%= driver._id %>">
+                                        <%= driver.name %> <%= driver.surname %>
+                                    </option>
+                            <% }}); %>
                         </select>
                         <button onclick="assignDriver('<%= job._id %>')" class="assign-btn">Ustaw</button>
                     </td>
