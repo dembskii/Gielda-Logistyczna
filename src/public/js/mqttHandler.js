@@ -1,7 +1,7 @@
 
 async function subscribe(path) {
 
-    const response = await fetch(`http://localhost:3000/api/subscriptions/sub/${path}`, {
+    const response = await fetch(`/api/subscriptions/sub/${path}`, {
         method: 'POST',
         credentials: 'include'
     });
@@ -16,7 +16,7 @@ async function subscribe(path) {
 
 async function unsubscribe(path) {
     try {
-        const response = await fetch(`http://localhost:3000/api/subscriptions/unsub/${path}`, {
+        const response = await fetch(`/api/subscriptions/unsub/${path}`, {
             method: 'DELETE',
             credentials: 'include'
         });

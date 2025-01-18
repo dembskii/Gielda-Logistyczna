@@ -1,5 +1,5 @@
 async function removeDriver(driverId) {
-    const response = await fetch(`http://localhost:3000/api/job/remove-driver/${driverId}`, {
+    const response = await fetch(`/api/job/remove-driver/${driverId}`, {
         method: 'DELETE',
         credentials: 'include'
     });
@@ -10,7 +10,7 @@ async function removeDriver(driverId) {
 }
 
 async function acceptJob(jobId) {
-    const response = await fetch(`http://localhost:3000/api/job/${jobId}/accept`, {
+    const response = await fetch(`/api/job/${jobId}/accept`, {
         method: 'PATCH',
         credentials: 'include'
     });

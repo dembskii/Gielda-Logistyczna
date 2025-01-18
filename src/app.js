@@ -6,12 +6,22 @@ const path = require('path');
 const mongoose = require('mongoose');
 const expressLayouts = require('express-ejs-layouts');
 const cookieParser = require('cookie-parser');
-const http = require('http')
-const server = http.createServer(app)
-const { Server } = require("socket.io");
-global.io = new Server(server);
+const https = require('https')
+const fs = require('fs')
 const User = require('./models/User.js')
+const { Server } = require("socket.io");
 
+
+// Konfiguracja SSL
+const options = {
+    key: fs.readFileSync('key.pem'),
+    cert: fs.readFileSync('cert.pem')
+  };
+
+const server = https.createServer(options,app)
+
+// Websockety
+global.io = new Server(server);
 
 // Importowanie routerów
 const indexRouter = require('./routes/index.js');
@@ -25,8 +35,6 @@ const subscriptionsRouter = require('./routes/subscriptions.js')
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('MongoDB connection error:', err));
-
-
 
 
 // Ustawienie EJS
@@ -77,5 +85,5 @@ global.io.on('connection', async (socket) => {
 // Uruchomienie serwera
 const PORT = 3000;
 server.listen(PORT, () => {
-    console.log(`Serwer działa http://localhost:${PORT}`);
+    console.log(`Serwer działa https://localhost:${PORT}`);
 });

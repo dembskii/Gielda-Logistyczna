@@ -4,6 +4,16 @@ const {auth} = require('../authMiddleware')
 const axios = require('axios');
 const User = require('../models/User');
 const Job = require('../models/Job');
+const https = require('https')
+
+
+const api = axios.create({
+    baseURL: 'https://localhost:3000/api',
+    httpsAgent: new https.Agent({  
+        rejectUnauthorized: process.env.NODE_ENV !== 'development'
+    }),
+    withCredentials: true
+});
 
 router.get('/', auth ,async (req, res) => {
     try {
@@ -20,7 +30,7 @@ router.get('/', auth ,async (req, res) => {
                 })
                 .populate('spedytorIds', 'name surname email isOnline');
 
-            const assingedJobsResponse = await axios.get('http://localhost:3000/api/job/assigned-jobs', {
+            const assingedJobsResponse = await api.get('/job/assigned-jobs', {
                 headers: { Cookie: `auth_token=${req.cookies.auth_token}` }
                 })
         
@@ -34,16 +44,16 @@ router.get('/', auth ,async (req, res) => {
         } else if ( req.user.role === 'spedytor') { // Spedytor
 
             const [allJobsResponse, acceptedJobsResponse, freeDriversResponse, managedDriversResponse ] = await Promise.all([
-                axios.get('http://localhost:3000/api/job/all', {
+                api.get('/job/all', {
                     headers: { Cookie: `auth_token=${req.cookies.auth_token}` }
                 }),
-                axios.get('http://localhost:3000/api/job/accepted-jobs', {
+                api.get('/job/accepted-jobs', {
                     headers: { Cookie: `auth_token=${req.cookies.auth_token}` }
                 }),
-                axios.get('http://localhost:3000/api/job/drivers', {
+                api.get('/job/drivers', {
                     headers: { Cookie: `auth_token=${req.cookies.auth_token}` }
                 }),
-                axios.get('http://localhost:3000/api/job/managed-drivers', {
+                api.get('/job/managed-drivers', {
                     headers: { Cookie: `auth_token=${req.cookies.auth_token}` }
                 })
             ]);
@@ -60,7 +70,7 @@ router.get('/', auth ,async (req, res) => {
             });
         } else if ( req.user.role === 'zleceniodawca') { // Zleceniodawca
     
-            const response = await axios.get('http://localhost:3000/api/job/own-jobs', {
+            const response = await api.get('/job/own-jobs', {
                     headers: {
                         Cookie: `auth_token=${req.cookies.auth_token}`
                     }
@@ -91,7 +101,7 @@ router.get('/invite-driver', auth, async (req, res) => {
     try {
         if ( req.user.role === 'spedytor') {
 
-            const allDriversResponse = await axios.get('http://localhost:3000/api/job/drivers', {
+            const allDriversResponse = await api.get('/job/drivers', {
                 headers: { Cookie: `auth_token=${req.cookies.auth_token}` }
             })
 

@@ -1,7 +1,7 @@
 
 async function respondInvitation(invitationId,responseValue) {
     
-    const response = await fetch(`http://localhost:3000/api/job/respond-invitation/${invitationId}`, {
+    const response = await fetch(`/api/job/respond-invitation/${invitationId}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'
