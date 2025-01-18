@@ -1,6 +1,6 @@
 <div class="update-job-form">
     <h2>Aktualizacja statusu zlecenia</h2>
-    <form action="/api/job/update-job-status" method="POST">
+    <form onsubmit="updateJobStatus(event)">
         <input type="hidden" name="jobId" value="<%= job._id %>">
         
         <div class="form-group">

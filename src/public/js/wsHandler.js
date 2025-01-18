@@ -42,14 +42,18 @@ const socket = io();
                  <div class="invitation-card">
                      <p>Spedytor: ${data.spedytorName} ${data.spedytorSurname}</p>
                      <div class="invitation-actions">
-                         <form action="/api/job/respond-invitation/${data.invitation._id}" method="POST" style="display: inline;">
-                             <input type="hidden" name="response" value="accept">
-                             <button type="submit" class="btn-accept">Akceptuj</button>
-                         </form>
-                         <form action="/api/job/respond-invitation/${data.invitation._id}" method="POST" style="display: inline;">
-                             <input type="hidden" name="response" value="reject">
-                             <button type="submit" class="btn-reject">Odrzuć</button>
-                         </form>
+                         <button 
+                            onclick="respondInvitation('${data.invitation._id}', 'accept')" 
+                            class="btn-accept"
+                        >
+                            Akceptuj
+                        </button>
+                        <button 
+                            onclick="respondInvitation('${data.invitation._id}', 'reject')" 
+                            class="btn-reject"
+                        >
+                            Odrzuć
+                        </button>
                      </div>
                  </div>
              `;

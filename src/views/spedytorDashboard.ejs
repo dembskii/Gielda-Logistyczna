@@ -22,7 +22,7 @@
     }
 
     fetch(`/api/job/assign-driver/${driverId}/${jobId}`, {
-        method: 'POST',
+        method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -61,9 +61,12 @@
                              data-user-status="<%= driver._id %>">
                             <%= driver.isOnline ? 'Dostępny(a)' : 'Niedostępny(a)' %>
                         </div>
-                        <form action="/api/job/remove-driver/<%= driver._id %>" method="post">
-                            <button type="submit" class="btn-remove">Usuń kierowcę</button>
-                        </form>
+                        <button 
+                            onclick="removeDriver('<%= driver._id %>')" 
+                            class="btn-remove"
+                        >
+                            Usuń kierowcę
+                        </button>
                     </div>
                 <% }) %>
             </div>
@@ -159,9 +162,12 @@
             <td><%= new Date(job.createdAt).toLocaleString() %></td>
             <td>
                 <% if (job.status === 'active') { %>
-                    <form action="/api/job/<%= job._id %>/accept" method="POST">
-                        <button type="submit" class="accept-btn">Przyjmij zlecenie</button>
-                    </form>
+                    <button 
+                    onclick="acceptJob('<%= job._id %>')" 
+                    class="accept-btn"
+                >
+                    Przyjmij zlecenie
+                </button>
                 <% } %>
             </td>
         </tr>

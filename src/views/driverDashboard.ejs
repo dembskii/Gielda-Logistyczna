@@ -30,14 +30,18 @@
                 <div class="invitation-card">
                     <p>Spedytor: <%= invitation.spedytorId.name %> <%= invitation.spedytorId.surname %></p>
                     <div class="invitation-actions">
-                        <form action="/api/job/respond-invitation/<%= invitation._id %>" method="POST" style="display: inline;">
-                            <input type="hidden" name="response" value="accept">
-                            <button type="submit" class="btn-accept">Akceptuj</button>
-                        </form>
-                        <form action="/api/job/respond-invitation/<%= invitation._id %>" method="POST" style="display: inline;">
-                            <input type="hidden" name="response" value="reject">
-                            <button type="submit" class="btn-reject">Odrzuć</button>
-                        </form>
+                        <button 
+                            onclick="respondInvitation('<%= invitation._id %>', 'accept')" 
+                            class="btn-accept"
+                        >
+                            Akceptuj
+                        </button>
+                        <button 
+                            onclick="respondInvitation('<%= invitation._id %>', 'reject')" 
+                            class="btn-reject"
+                        >
+                            Odrzuć
+                        </button>
                     </div>
                 </div>
             <% }) %>

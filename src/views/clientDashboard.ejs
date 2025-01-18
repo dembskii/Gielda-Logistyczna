@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client Dashboard</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
-</head>
+
 <body>
     <div id="client-dashboard">
         <div id="add-job">
@@ -98,9 +91,12 @@
                                 <% } %>
                             </td>
                             <td>
-                                <form action="/api/job/remove-job/<%= job._id %>" method="POST" style="margin: 0;">
-                                    <button type="submit" class="delete-btn">Usuń zlecenie</button>
-                                </form>
+                                <button 
+                                    onclick="deleteJob('<%= job._id %>')" 
+                                    class="delete-btn"
+                                >
+                                    Usuń zlecenie
+                                </button>
                                 <% const isSubscribed = user.subscribedUrls && user.subscribedUrls.includes(job._id.toString()); %>
                                 <% if (isSubscribed) { %>
                                     <button 
@@ -127,4 +123,3 @@
         </div>
     </div>
 </body>
-</html>

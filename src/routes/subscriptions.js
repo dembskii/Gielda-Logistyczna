@@ -28,7 +28,7 @@ router.post('/sub/:path', auth, async (req, res) => {
     }
 })
 
-router.post('/unsub/:path', auth, async (req, res) => {
+router.delete('/unsub/:path', auth, async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
         

@@ -19,6 +19,7 @@ router.get('/all', auth, async (req, res) => {
     }
 });
 
+
 // Dodawanie zlecenia
 router.post('/add', auth, async (req, res) => {
     try {
@@ -35,7 +36,7 @@ router.post('/add', auth, async (req, res) => {
 });
 
 // Usuwanie zlecenia
-router.post('/remove-job/:id', auth, async (req, res) => {
+router.delete('/remove-job/:id', auth, async (req, res) => {
     try {
         const job = await Job.findOne({ 
             _id: req.params.id, 
@@ -56,16 +57,22 @@ router.post('/remove-job/:id', auth, async (req, res) => {
             })
         }
 
+        // Usuwanie referncji odnośnie zasubskrybowanych scieżek MQTT 
+        await User.updateMany(
+            { subscribedUrls: job._id },
+            { $pull: { subscribedUrls: job._id } }
+        );
+
+
         await job.deleteOne();
-        res.json({ message: 'Zlecenie usunięte' });
+        res.status(200).json({ message: 'Zlecenie usunięte' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
 // Przyjmowanie zlecenia
-// Musi być POST zamiast PUT ponieważ html domyślnie nie wspiera PUT
-router.post('/:id/accept', auth, async (req, res) => {
+router.patch('/:id/accept', auth, async (req, res) => {
     try {
         const job = await Job.findOne({ 
             _id: req.params.id, 
@@ -80,7 +87,7 @@ router.post('/:id/accept', auth, async (req, res) => {
         job.spedytorId = req.user.id;
         await job.save();
 
-        res.redirect('/dashboard')
+        res.status(200).json('Job accepted')
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -225,7 +232,7 @@ router.post('/invite-driver/:driverId', auth, async (req, res) => {
 });
 
 // Usunięcie kierowcy
-router.post('/remove-driver/:driverId', auth, async (req, res) => {
+router.delete('/remove-driver/:driverId', auth, async (req, res) => {
 
     // Znalezienie kierowcy
     const existingDriver = await User.findOne({
@@ -234,7 +241,7 @@ router.post('/remove-driver/:driverId', auth, async (req, res) => {
     })
 
     if (!existingDriver) {
-        res.json({error:'Kierowca nie istnieje lub nie podlega pod spedytora, który wysłał requesta'})
+        res.status(404).json({error:'Kierowca nie istnieje lub nie podlega pod spedytora, który wysłał requesta'})
     }
     
     // Zaktualizowanie prac, które miał przypisane kierowca
@@ -256,12 +263,12 @@ router.post('/remove-driver/:driverId', auth, async (req, res) => {
         { new: true }
     );
 
-    res.status(200).redirect('/dashboard')
+    res.status(200).json('Sucessfully removed driver')
 })
 
 
 // Odpowiadanie na zaproszenie spedytora
-router.post('/respond-invitation/:invitationId', auth, async (req, res) => {
+router.patch('/respond-invitation/:invitationId', auth, async (req, res) => {
     try {
         const { response } = req.body;
         
@@ -306,15 +313,15 @@ router.post('/respond-invitation/:invitationId', auth, async (req, res) => {
             });
         }
 
-        return res.redirect('/dashboard');
+        return res.status(200).json('Received invitation successfully')
     } catch (error) {
         console.error('Error processing invitation:', error);
         return res.status(500).json({ error: error.message });
     }
 });
 
-
-router.post('/assign-driver/:driverId/:jobId', auth ,async (req, res) => {
+// Przypisanie kierowcy do zlecenia
+router.patch('/assign-driver/:driverId/:jobId', auth ,async (req, res) => {
 
     // Przypisanie kierowcy do zlecenia
     await Job.findOneAndUpdate(
@@ -329,7 +336,7 @@ router.post('/assign-driver/:driverId/:jobId', auth ,async (req, res) => {
         }
     )
 
-    res.json(''),200
+    res.status(200).json('Driver assigned successfully')
 })
 
 // Pobiera przypisane do kierowcy zlecenia
@@ -347,7 +354,7 @@ router.get('/assigned-jobs', auth, async (req, res) => {
 
 
 // Aktualizowanie statusu przez kierowce
-router.post('/update-job-status', auth, async (req, res) => {
+router.patch('/update-job-status', auth, async (req, res) => {
     try {
         
         if (req.user.role !== 'kierowca') {
@@ -393,7 +400,7 @@ router.post('/update-job-status', auth, async (req, res) => {
         await job.save();
         mqttClient.publish(`${jobId}`,JSON.stringify({status}))
         
-        res.redirect('/dashboard')
+        res.status(200).json('Job status updated successfully')
 
     } catch (error) {
         console.error('Job status update error:', error);
