@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {isTokenValid} = require('../authMiddleware');
+const {isTokenValid} = require('../services/authService');
 
 router.get('/', async (req, res) => {
     const isLoggedIn = await isTokenValid(req) ? true : false
