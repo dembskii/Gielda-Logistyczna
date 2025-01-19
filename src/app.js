@@ -18,10 +18,12 @@ const options = {
     cert: fs.readFileSync('cert.pem')
   };
 
-const server = https.createServer(options,app)
+
+const httpsServer = https.createServer(options,app)
+
 
 // Websockety
-global.io = new Server(server);
+global.io = new Server(httpsServer);
 
 // Importowanie routerów
 const indexRouter = require('./routes/index.js');
@@ -57,7 +59,6 @@ app.use('/favicon', express.static(path.join(__dirname, 'public/favicon')));
 app.use(cookieParser());
 
 
-
 // Router
 app.use('/', indexRouter);
 app.use('/api/auth', authRouter);
@@ -85,7 +86,6 @@ global.io.on('connection', async (socket) => {
 });
 
 // Uruchomienie serwera
-const PORT = 3000;
-server.listen(PORT, () => {
-    console.log(`Serwer działa https://localhost:${PORT}`);
+httpsServer.listen(3000, '127.0.0.1',() => {
+    console.log(`Serwer działa https://localhost:${3000}`);
 });

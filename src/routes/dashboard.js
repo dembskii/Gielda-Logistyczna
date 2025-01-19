@@ -8,7 +8,7 @@ const https = require('https')
 
 
 const api = axios.create({
-    baseURL: 'https://localhost:3000/api',
+    baseURL: 'https://localhost/api',
     httpsAgent: new https.Agent({  
         rejectUnauthorized: process.env.NODE_ENV !== 'development'
     }),
