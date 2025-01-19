@@ -71,7 +71,7 @@ router.delete('/remove-job/:id', auth, async (req, res) => {
     }
 });
 
-// Przyjmowanie zlecenia
+// Przyjmowanie zlecenia przez spedytora
 router.patch('/:id/accept', auth, async (req, res) => {
     try {
         const job = await Job.findOne({ 
@@ -88,6 +88,34 @@ router.patch('/:id/accept', auth, async (req, res) => {
         await job.save();
 
         res.status(200).json('Job accepted')
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Rezygnacja ze zlecenia przez spedytora
+router.delete('/:id/delete', auth, async (req, res) => {
+    try {
+        const job = await Job.findOne({ 
+            _id: req.params.id, 
+            spedytorId: req.user.id,
+            status: 'assigned'
+        });
+
+        if (!job) {
+            return res.status(404).json({ error: 'Zlecenie jest już w trakcie wykonywania' });
+        }
+
+        const timeUntilStart = job.startDate - new Date();
+        if (timeUntilStart < 12 * 60 * 60 * 1000) { 
+            return res.status(400).json({ error: 'Nie można zrezygnować ze zlecenia na mniej niż 12h przed rozpoczęciem' });
+        }
+
+        job.status = 'active';
+        job.spedytorId = null;
+        await job.save();
+
+        res.status(200).json('Zrezygnowano ze zlecenia');
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -113,7 +141,6 @@ router.get('/accepted-jobs', auth, async (req, res) => {
     try {
         const jobs = await Job.find({ 
             spedytorId: req.user.id,
-            status: 'assigned'
         })
         .populate('userId', 'email')
         .populate('spedytorId', 'email')
@@ -243,15 +270,32 @@ router.delete('/remove-driver/:driverId', auth, async (req, res) => {
     if (!existingDriver) {
         res.status(404).json({error:'Kierowca nie istnieje lub nie podlega pod spedytora, który wysłał requesta'})
     }
-    
-    // Zaktualizowanie prac, które miał przypisane kierowca
-    await Job.updateMany(
-    { driverId: existingDriver._id },
-    { 
-        $set: { 
-            driverId: null,
-        } 
+
+    // Szukanie prac, które są już rozpoczęte, lub których nie można już anulować
+    const upcomingJobs = await Job.find({
+        driverId: existingDriver._id,
+        status: "assigned",
+        startDate: { 
+            $lt: new Date(Date.now() + (12 * 60 * 60 * 1000)) // less than 12 hours from now
+        }
+    });
+
+    if (upcomingJobs.length > 0) {
+        return res.status(400).json({ 
+            error: 'Nie można usunąć kierowcy, który ma przypisane zlecenia rozpoczynające się w ciągu najbliższych 12 godzin' 
+        });
     }
+    
+    // Zaktualizowanie prac, które miał przypisane kierowca,
+    await Job.updateMany(
+        { 
+            driverId: existingDriver._id,
+        },
+        { 
+            $set: { 
+                driverId: null,
+            } 
+        }
     );
 
     // Usunięcie spedytora z listy spedytorów zarządzających kierowcą.

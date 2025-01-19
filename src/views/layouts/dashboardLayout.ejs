@@ -11,18 +11,18 @@
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script src="/js/main.js"></script>
     <script>
         window.userId = "<%= user.id %>";
         window.userRole = "<%= user.role %>";
         window.subscribedUrls = "<%= user.subscribedUrls %>"
     </script>
-    
     <script src="/js/wsHandler.js"></script>
     <script src="/js/mqttHandler.js"></script>
     <script src="/js/client.js"></script>
     <script src="/js/driver.js"></script>
     <script src="/js/spedytor.js"></script>
-    <script src="/js/main.js"></script>
+    
 </head>
 <body>
     <div id="popup-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;"></div>

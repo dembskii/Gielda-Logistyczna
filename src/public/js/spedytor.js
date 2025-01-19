@@ -19,3 +19,17 @@ async function acceptJob(jobId) {
         window.location.reload()
     }
 }
+
+async function deleteJob(jobId) {
+    const response = await fetch(`/api/job/${jobId}/delete`, {
+        method: 'DELETE',
+        credentials: 'include'
+    })
+
+    if (response.ok) {
+        window.location.reload()
+    } else {
+        const data = await response.json()
+        errorPopUp('Error', data.error )
+    }
+}

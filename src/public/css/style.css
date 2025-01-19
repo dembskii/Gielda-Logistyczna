@@ -753,4 +753,36 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+.popup-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+}
+
+.popup {
+  background-color: #fff;
+  border-left: 4px solid #ff3333;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  margin-bottom: 10px;
+  min-width: 300px;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all 0.3s ease;
+}
+.popup.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.popup__title {
+  margin: 0 0 5px 0;
+  color: #ff3333;
+}
+.popup__message {
+  margin: 0;
+  color: #666;
 }/*# sourceMappingURL=style.css.map */
