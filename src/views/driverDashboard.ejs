@@ -25,6 +25,7 @@
 
     <div class="invitations-section">
         <h3>Zaproszenia od spedytorów</h3>
+        <div class="invitatons-container">
         <% if (user.pendingInvitations && user.pendingInvitations.length > 0) { %>
             <% user.pendingInvitations.forEach(invitation => { %>
                 <div class="invitation-card">
@@ -48,6 +49,7 @@
         <% } else { %>
             <p>Brak oczekujących zaproszeń</p>
         <% } %>
+        </div>
     </div>
 
     <div class="assigned-jobs-section">

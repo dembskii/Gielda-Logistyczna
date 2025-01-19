@@ -188,98 +188,152 @@ $status-rejected: #fc8181;
 
 .jobs-table {
   width: 100%;
-  border-collapse: collapse;
+  font-size: 0.875rem;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
   background: white;
   border-radius: $border-radius;
-  overflow: hidden;
   box-shadow: 0 4px 6px $shadow-color;
   margin-bottom: 2rem;
-
-  h3 {
-    padding: 1rem;
-    margin: 0;
-    background: $primary-color;
-    color: white;
-  }
+  overflow: hidden;
 
   thead {
-    background: $secondary-color;
-    
+    background: #f8fafc;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 0.75rem 0.5rem;
+
+
     th {
-      padding: 1rem;
-      text-align: left;
+      padding: 0.75rem 0.5rem;
+
       font-weight: 600;
       color: $text-dark;
-      border-bottom: 2px solid $table-border;
+      border-bottom: 2px solid #e2e8f0;
+      white-space: nowrap;
     }
   }
 
   tbody {
     tr {
-      border-bottom: 1px solid $table-border;
-      transition: $transition;
-
       &:hover {
-        background: rgba($primary-color, 0.05);
+        background: #f8fafc;
       }
 
-      td {
-        padding: 1rem;
-        color: $text-dark;
-
-        select {
-          padding: 0.5rem;
-          border: 1px solid $table-border;
-          border-radius: $border-radius;
-          margin-right: 0.5rem;
-          font-size: 0.9rem;
-        }
-
-        .assign-btn {
-          padding: 0.5rem 1rem;
-          background: $primary-color;
-          color: white;
-          border: none;
-          border-radius: $border-radius;
-          cursor: pointer;
-          transition: $transition;
-
-          &:hover {
-            background: darken($primary-color, 10%);
-          }
-        }
+      &:not(:last-child) {
+        border-bottom: 1px solid #e2e8f0;
       }
+    }
+
+    td {
+      
+      padding: 0.5rem;
+      color: $text-dark;
+      vertical-align: middle;
+
+      &:nth-child(4), &:nth-child(6) {  // Address columns
+        max-width: 200px;
+        white-space: normal;
+        word-wrap: break-word;
+      }
+    }
+  }
+
+  // Column widths
+  th, td {
+    &:nth-child(1) { width: 8%; }   // Price
+    &:nth-child(2) { width: 7%; }   // Weight
+    &:nth-child(3) { width: 10%; }  // Dimensions
+    &:nth-child(4) { width: 15%; }  // Pickup Address
+    &:nth-child(5) { width: 10%; }  // Pickup Date
+    &:nth-child(6) { width: 15%; }  // Delivery Address
+    &:nth-child(7) { width: 10%; }  // Delivery Date
+    &:nth-child(8) { width: 7%; }   // Distance
+    &:nth-child(9) { width: 8%; }   // Status
+    &:nth-child(10) { width: 10%; } // Created Date
+    &:nth-child(11) { width: 15%; } // Actions
+  }
+
+  // Button styles
+  .accept-btn, .assign-btn, .delete-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin: 0.25rem;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+  }
+
+  .accept-btn {
+    background: #48bb78;
+    color: white;
+    &:hover { background: #38a169; }
+  }
+
+  .assign-btn {
+    background: #4299e1;
+    color: white;
+    &:hover { background: #3182ce; }
+  }
+
+  .delete-btn {
+    background: #f56565;
+    color: white;
+    &:hover { background: #e53e3e; }
+  }
+
+  // Select styles
+  select {
+    width: 100%;
+    max-width: 200px;
+    padding: 0.25rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    background: white;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+
+    &:focus {
+      outline: none;
+      border-color: #4299e1;
+      box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
     }
   }
 }
 
-.status-pending {
-  color: $status-pending;
-  font-weight: 500;
-}
-
-.status-accepted {
-  color: $status-accepted;
-  font-weight: 500;
-}
-
-.status-completed {
-  color: $status-completed;
-  font-weight: 500;
-}
-
-.status-rejected {
-  color: $status-rejected;
-  font-weight: 500;
-}
-
-@media (max-width: 1024px) {
-  .jobs-table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
+// Responsive wrapper
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 1rem 0;
+  
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
   }
 }
+
+// Status colors
+.status-active { color: #4299e1; }
+.status-assigned { color: #48bb78; }
+.status-completed { color: #805ad5; }
+.status-cancelled { color: #f56565; }
 
 #main-page-header {
   margin-bottom: 1rem;
@@ -347,139 +401,179 @@ $status-rejected: #fc8181;
 
 
 #client-dashboard {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 2rem;
   padding: 2rem;
-  background: white;
-  border-radius: $border-radius;
-  box-shadow: 0 10px 20px $shadow-color;
-  max-width: 1200px;
-  margin: 2rem auto;
+  max-width: 1800px;
+  margin: $navbar-height + 20px auto 0;
 
   #add-job {
-    width: 100%;
-    margin-bottom: 2rem;
+    background: white;
+    padding: 1.5rem;
+    border-radius: $border-radius;
+    box-shadow: 0 4px 6px $shadow-color;
+    height: fit-content;
+    position: sticky;
+    top: $navbar-height + 20px;
+
+    h3 {
+      margin: 0 0 1.5rem 0;
+      color: $text-dark;
+      font-size: 1.2rem;
+    }
 
     #add-job-form {
-      background: $secondary-color;
-      padding: 2rem;
-      border-radius: $border-radius;
-      box-shadow: 0 4px 6px $shadow-color;
-
       .form-group {
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
 
         label {
           display: block;
-          margin-bottom: 0.5rem;
-          font-weight: 500;
+          margin-bottom: 0.3rem;
+          font-size: 0.9rem;
           color: $text-dark;
+          font-weight: 500;
         }
 
         input[type="number"],
         input[type="text"],
         input[type="datetime-local"] {
           width: 100%;
-          padding: 0.8rem;
-          border: 2px solid $table-border;
+          padding: 0.6rem;
+          border: 1px solid $table-border;
           border-radius: $border-radius;
-          font-size: 1rem;
-          transition: $transition;
+          font-size: 0.7rem;
+          box-sizing: border-box;
 
           &:focus {
-            outline: none;
             border-color: $primary-color;
-            box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+            box-shadow: 0 0 0 2px rgba($primary-color, 0.1);
           }
         }
 
         .dimensions {
-          display: flex;
-          gap: 1rem;
-
-          input {
-            flex: 1;
-          }
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 0.5rem;
         }
       }
 
       .submit-btn {
         width: 100%;
-        padding: 1rem;
-        background-color: $primary-color;
+        padding: 0.8rem;
+        background: $primary-color;
         color: white;
         border: none;
         border-radius: $border-radius;
-        font-size: 1rem;
         font-weight: 600;
         cursor: pointer;
         transition: $transition;
+        margin-top: 1rem;
 
         &:hover {
-          background-color: darken($primary-color, 10%);
-          transform: translateY(-2px);
-        }
-
-        &:active {
-          transform: translateY(0);
+          background: darken($primary-color, 10%);
+          transform: translateY(-1px);
         }
       }
     }
   }
 
   #client-jobs {
-    width: 100%;
-
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      background: white;
+      border-radius: $border-radius;
+      box-shadow: 0 4px 6px $shadow-color;
+    }
+  
     .jobs-table {
       width: 100%;
       border-collapse: collapse;
-      background: white;
-      border-radius: $border-radius;
-      overflow: hidden;
-      box-shadow: 0 4px 6px $shadow-color;
-
-      thead {
-        background: $secondary-color;
-
-        th {
-          padding: 1rem;
-          text-align: left;
-          font-weight: 600;
-          color: $text-dark;
-          border-bottom: 2px solid $table-border;
+      font-size: 0.875rem;
+  
+      th, td {
+        padding: 0.75rem;
+        text-align: left;
+        max-height: 100px;
+        overflow-y: auto;
+        word-wrap: break-word;
+        word-break: break-word;
+        line-height: 1.4;
+      }
+  
+      th {
+        background: #f8fafc;
+        font-weight: 600;
+        border-bottom: 2px solid #e2e8f0;
+        position: sticky;
+        top: 0;
+      }
+  
+      td {
+        border-bottom: 1px solid #e2e8f0;
+        vertical-align: middle;
+        height: 100%;
+      }
+  
+      tbody tr:hover {
+        background: #f8fafc;
+      }
+  
+      // Column widths
+      th, td {
+        &:nth-child(1) { width: 7%; }   // Price
+        &:nth-child(2) { width: 6%; }   // Weight
+        &:nth-child(3) { width: 8%; }   // Dimensions
+        &:nth-child(4) { width: 12%; }  // Pickup Address
+        &:nth-child(5) { width: 10%; }  // Pickup Date
+        &:nth-child(6) { width: 12%; }  // Delivery Address
+        &:nth-child(7) { width: 10%; }  // Delivery Date
+        &:nth-child(8) { width: 6%; }   // Distance
+        &:nth-child(9) { width: 7%; }   // Status
+        &:nth-child(10) { width: 8%; }  // Created Date
+        &:nth-child(11) { width: 7%; }  // Driver
+        &:nth-child(12) { width: 10%; }  // Actions
+      }
+  
+      .delete-btn, .sub-btn {
+        padding: 0.4rem 0.8rem;
+        border: none;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: $transition;
+        margin: 0.2rem;
+        white-space: nowrap;
+      }
+  
+      .delete-btn {
+        background: #f56565;
+        color: white;
+        &:hover { background: #e53e3e; }
+      }
+  
+      .sub-btn {
+        background: #4299e1;
+        color: white;
+        &:hover { background: #3182ce; }
+        
+        &.subscribed {
+          background: #48bb78;
+          &:hover { background: #38a169; }
         }
       }
+    }
+  }
+}
 
-      tbody {
-        tr {
-          border-bottom: 1px solid $table-border;
-          transition: $transition;
-
-          &:hover {
-            background: rgba($primary-color, 0.05);
-          }
-
-          td {
-            padding: 1rem;
-            color: $text-dark;
-
-            .delete-btn {
-              padding: 0.5rem 1rem;
-              background: $primary-color;
-              color: white;
-              border: none;
-              border-radius: $border-radius;
-              cursor: pointer;
-              transition: $transition;
-
-              &:hover {
-                background: darken($primary-color, 10%);
-              }
-            }
-          }
-        }
-      }
+// Responsive design
+@media (max-width: 1024px) {
+  #client-dashboard {
+    grid-template-columns: 1fr;
+    
+    #add-job {
+      position: static;
     }
   }
 }
@@ -574,6 +668,9 @@ $status-rejected: #fc8181;
 }
 
 #spedytor-dashboard {
+  padding: 0 2rem;
+  max-width: 1900px;
+  margin: 0 auto;
   .drivers-section {
     .managed-drivers {
       .header {
@@ -667,161 +764,170 @@ $status-rejected: #fc8181;
 
 
 #driver-dashboard {
-  .drivers-section,
-  .assigned-jobs-section {
-    margin-top: 2rem;
-    
-    .managed-by,
-    .jobs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1800px;
+  width: 1800px;
+  margin: $navbar-height + 20px auto 0;
 
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1.5rem;
+  .drivers-section {
+    padding: 2rem;
+  }
 
-        h3 {
-          font-size: 1.5rem;
-          color: $primary-color;
-          margin: 0;
+  .drivers-section, .invitations-section, .assigned-jobs-section {
+    background: white;
+    border-radius: $border-radius;
+    padding-top: 2rem;
+
+    h3 {
+      margin: 0 0 1.5rem 0;
+      color: $text-dark;
+      font-size: 1.2rem;
+    }
+  }
+
+  .spedytors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+
+    .spedytor-card {
+      padding: 1rem;
+      border: 1px solid $table-border;
+      box-shadow: 0 3px 3px $shadow-color;
+      border-radius: $border-radius;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .status-indicator {
+        padding: 0.3rem 0.6rem;
+        border-radius: 1rem;
+        font-size: 0.8rem;
+        
+        &.online {
+          background: #e8f5e9;
+          color: #2e7d32;
+        }
+        
+        &.offline {
+          background: #fafafa;
+          color: #616161;
         }
       }
     }
-
-    // Grid layout for both sections
-    .spedytors-grid,
-    .jobs-grid {
+  }
+    .invitations-section {
+    .invitations-container {
       display: flex;
-      overflow-x: auto;
       gap: 1rem;
-      padding-bottom: 1rem;
-
+      overflow-x: auto;
+      padding: 0.5rem 0;
+      margin: 0 -2rem;
+      padding: 0 2rem;
+      scroll-behavior: smooth;
+      
       &::-webkit-scrollbar {
         height: 8px;
       }
-
+      
       &::-webkit-scrollbar-track {
-        background: $secondary-color;
+        background: #f1f1f1;
         border-radius: 4px;
       }
-
+      
       &::-webkit-scrollbar-thumb {
-        background: $primary-color;
+        background: #888;
         border-radius: 4px;
       }
     }
-
-    // Card styles for both sections
-    .spedytor-card,
-    .job-card {
-      background: $secondary-color;
-      padding: 1.5rem;
+  
+    .invitation-card {
+      min-width: 300px;
+      max-width: 300px;
+      padding: 1rem;
+      background: white;
+      border: 1px solid rgba(0, 0, 0, 0.08);
       border-radius: $border-radius;
-      box-shadow: 0 2px 4px $shadow-color;
-      min-width: 250px;
-      flex-shrink: 0;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 0.8rem;
-
-      .name,
-      .job-title {
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: $text-dark;
-      }
-
-      .email,
-      .job-details {
+      gap: 0.75rem;
+      
+      p {
+        margin: 0;
         font-size: 0.9rem;
         color: $text-dark;
-        opacity: 0.8;
       }
-
-      .status-indicator {
-        padding: 0.4rem 0.8rem;
-        border-radius: 1rem;
-        font-size: 0.9rem;
-        font-weight: 500;
-
-        &.online,
-        &.active {
-          background: rgba($status-accepted, 0.1);
-          color: $status-accepted;
-        }
-
-        &.offline,
-        &.inactive {
-          background: rgba($status-rejected, 0.1);
-          color: $status-rejected;
+      
+      .invitation-actions {
+        display: flex;
+        gap: 0.5rem;
+        
+        button {
+          flex: 1;
+          padding: 0.5rem;
+          font-size: 0.8rem;
+          font-weight: 500;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          
+          &.btn-accept {
+            background: #4caf50;
+            color: white;
+            
+            &:hover {
+              background: #43a047;
+            }
+          }
+          
+          &.btn-reject {
+            background: #f44336;
+            color: white;
+            
+            &:hover {
+              background: #e53935;
+            }
+          }
         }
       }
     }
   }
 
-  .invitations-section {
-    margin-top: 2rem;
-    padding: 1.5rem 0;
-  
-    .invitation-card {
-      background: white;
-      padding: 1.5rem;
-      border-radius: $border-radius;
-      margin-bottom: 1rem;
-      box-shadow: 0 2px 4px $shadow-color;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-  
-      p {
-        font-size: 1.1rem;
-        color: $text-dark;
-        margin: 0;
-        text-align: center;
-      }
-  
-      .invitation-actions {
-        display: flex;
-        gap: 0.8rem;
-        justify-content: center;
-        width: 100%;
-  
-        form {
-          flex: 1;
-          max-width: 150px;
-        }
-  
-        button {
-          width: 100%;
-          padding: 0.6rem 1.2rem;
-          border: none;
-          border-radius: $border-radius;
-          font-weight: 500;
-          cursor: pointer;
-          transition: $transition;
-  
-          &.btn-accept {
-            background: $status-accepted;
-            color: white;
-  
-            &:hover {
-              background: darken($status-accepted, 10%);
-            }
-          }
-  
-          &.btn-reject {
-            background: $status-rejected;
-            color: white;
-  
-            &:hover {
-              background: darken($status-rejected, 10%);
-            }
-          }
-        }
-      }
+  .jobs-table {
+    width: 100%;
+    border-collapse: collapse;
+    
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid $table-border;
+      font-size: 0.9rem;
     }
+
+    th {
+      font-weight: 600;
+      color: $text-dark;
+      background: #f5f5f5;
+    }
+
+    .btn-update {
+      padding: 0.5rem 1rem;
+      background: $primary-color;
+      color: white;
+      border: none;
+      border-radius: $border-radius;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    .status-pending { color: #f57c00; }
+    .status-in-progress { color: #1976d2; }
+    .status-completed { color: #388e3c; }
+    .status-cancelled { color: #d32f2f; }
   }
 }
 
@@ -873,5 +979,110 @@ $status-rejected: #fc8181;
   &__message {
       margin: 0;
       color: #666;
+  }
+}
+
+.update-job-form {
+  max-width: 600px;
+  margin: $navbar-height + 40px auto 0;
+  padding: 2rem;
+  background: white;
+  border-radius: $border-radius;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+
+  h2 {
+    color: $text-dark;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid $primary-color;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: $text-dark;
+      font-weight: 500;
+    }
+
+    select, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+      }
+    }
+
+    select {
+      background-color: white;
+      cursor: pointer;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+  }
+
+  .job-details {
+    background: #f8fafc;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 2rem 0;
+
+    p {
+      margin: 0.5rem 0;
+      color: $text-dark;
+      font-size: 0.95rem;
+
+      strong {
+        color: darken($text-dark, 10%);
+        margin-right: 0.5rem;
+      }
+    }
+  }
+
+  .btn-submit {
+    width: 100%;
+    padding: 1rem;
+    background: $primary-color;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: darken($primary-color, 5%);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .update-job-form {
+    margin: $navbar-height + 20px 1rem 0;
+    padding: 1.5rem;
+
+    h2 {
+      font-size: 1.25rem;
+    }
   }
 }

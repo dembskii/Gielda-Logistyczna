@@ -108,7 +108,7 @@
                             <%# Default option - current driver or "Wybierz kierowcę" %>
                             <% if (job.driverId ) { %>
                                 <option value="<%= job.driverId._id %>" selected>
-                                    <%= job.driverId.name %> <%= job.driverId.surname %> (obecnie przypisany)
+                                    <%= job.driverId.name %> <%= job.driverId.surname %>
                                 </option>
                             <% } else { %>
                                 <option value="" selected>Wybierz kierowcę</option>

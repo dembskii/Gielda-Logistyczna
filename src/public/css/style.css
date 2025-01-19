@@ -156,87 +156,161 @@ body {
 
 .jobs-table {
   width: 100%;
-  border-collapse: collapse;
+  font-size: 0.875rem;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
   background: white;
   border-radius: 8px;
-  overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
-}
-.jobs-table h3 {
-  padding: 1rem;
-  margin: 0;
-  background: #4a90e2;
-  color: white;
+  overflow: hidden;
 }
 .jobs-table thead {
-  background: #f5f5f5;
+  background: #f8fafc;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 0.75rem 0.5rem;
 }
 .jobs-table thead th {
-  padding: 1rem;
-  text-align: left;
+  padding: 0.75rem 0.5rem;
   font-weight: 600;
   color: #2d3748;
   border-bottom: 2px solid #e2e8f0;
-}
-.jobs-table tbody tr {
-  border-bottom: 1px solid #e2e8f0;
-  transition: all 0.3s ease;
+  white-space: nowrap;
 }
 .jobs-table tbody tr:hover {
-  background: rgba(74, 144, 226, 0.05);
+  background: #f8fafc;
 }
-.jobs-table tbody tr td {
-  padding: 1rem;
-  color: #2d3748;
+.jobs-table tbody tr:not(:last-child) {
+  border-bottom: 1px solid #e2e8f0;
 }
-.jobs-table tbody tr td select {
+.jobs-table tbody td {
   padding: 0.5rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  margin-right: 0.5rem;
-  font-size: 0.9rem;
+  color: #2d3748;
+  vertical-align: middle;
 }
-.jobs-table tbody tr td .assign-btn {
+.jobs-table tbody td:nth-child(4), .jobs-table tbody td:nth-child(6) {
+  max-width: 200px;
+  white-space: normal;
+  word-wrap: break-word;
+}
+.jobs-table th:nth-child(1), .jobs-table td:nth-child(1) {
+  width: 8%;
+}
+.jobs-table th:nth-child(2), .jobs-table td:nth-child(2) {
+  width: 7%;
+}
+.jobs-table th:nth-child(3), .jobs-table td:nth-child(3) {
+  width: 10%;
+}
+.jobs-table th:nth-child(4), .jobs-table td:nth-child(4) {
+  width: 15%;
+}
+.jobs-table th:nth-child(5), .jobs-table td:nth-child(5) {
+  width: 10%;
+}
+.jobs-table th:nth-child(6), .jobs-table td:nth-child(6) {
+  width: 15%;
+}
+.jobs-table th:nth-child(7), .jobs-table td:nth-child(7) {
+  width: 10%;
+}
+.jobs-table th:nth-child(8), .jobs-table td:nth-child(8) {
+  width: 7%;
+}
+.jobs-table th:nth-child(9), .jobs-table td:nth-child(9) {
+  width: 8%;
+}
+.jobs-table th:nth-child(10), .jobs-table td:nth-child(10) {
+  width: 10%;
+}
+.jobs-table th:nth-child(11), .jobs-table td:nth-child(11) {
+  width: 15%;
+}
+.jobs-table .accept-btn, .jobs-table .assign-btn, .jobs-table .delete-btn {
   padding: 0.5rem 1rem;
-  background: #4a90e2;
-  color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 4px;
+  font-size: 0.875rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s;
+  margin: 0.25rem;
 }
-.jobs-table tbody tr td .assign-btn:hover {
-  background: #2275d7;
+.jobs-table .accept-btn:hover, .jobs-table .assign-btn:hover, .jobs-table .delete-btn:hover {
+  transform: translateY(-1px);
+}
+.jobs-table .accept-btn {
+  background: #48bb78;
+  color: white;
+}
+.jobs-table .accept-btn:hover {
+  background: #38a169;
+}
+.jobs-table .assign-btn {
+  background: #4299e1;
+  color: white;
+}
+.jobs-table .assign-btn:hover {
+  background: #3182ce;
+}
+.jobs-table .delete-btn {
+  background: #f56565;
+  color: white;
+}
+.jobs-table .delete-btn:hover {
+  background: #e53e3e;
+}
+.jobs-table select {
+  width: 100%;
+  max-width: 200px;
+  padding: 0.25rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  background: white;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+.jobs-table select:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
 }
 
-.status-pending {
-  color: #f6ad55;
-  font-weight: 500;
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 1rem 0;
+}
+.table-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+.table-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
 }
 
-.status-accepted {
-  color: #68d391;
-  font-weight: 500;
+.status-active {
+  color: #4299e1;
+}
+
+.status-assigned {
+  color: #48bb78;
 }
 
 .status-completed {
-  color: #4299e1;
-  font-weight: 500;
+  color: #805ad5;
 }
 
-.status-rejected {
-  color: #fc8181;
-  font-weight: 500;
+.status-cancelled {
+  color: #f56565;
 }
 
-@media (max-width: 1024px) {
-  .jobs-table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-}
 #main-page-header {
   margin-bottom: 1rem;
 }
@@ -297,123 +371,186 @@ body {
 }
 
 #client-dashboard {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 2rem;
   padding: 2rem;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  max-width: 1200px;
-  margin: 2rem auto;
+  max-width: 1800px;
+  margin: 80px auto 0;
 }
 #client-dashboard #add-job {
-  width: 100%;
-  margin-bottom: 2rem;
-}
-#client-dashboard #add-job #add-job-form {
-  background: #f5f5f5;
-  padding: 2rem;
+  background: white;
+  padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: -moz-fit-content;
+  height: fit-content;
+  position: sticky;
+  top: 80px;
+}
+#client-dashboard #add-job h3 {
+  margin: 0 0 1.5rem 0;
+  color: #2d3748;
+  font-size: 1.2rem;
 }
 #client-dashboard #add-job #add-job-form .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 #client-dashboard #add-job #add-job-form .form-group label {
   display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
+  margin-bottom: 0.3rem;
+  font-size: 0.9rem;
   color: #2d3748;
+  font-weight: 500;
 }
 #client-dashboard #add-job #add-job-form .form-group input[type=number],
 #client-dashboard #add-job #add-job-form .form-group input[type=text],
 #client-dashboard #add-job #add-job-form .form-group input[type=datetime-local] {
   width: 100%;
-  padding: 0.8rem;
-  border: 2px solid #e2e8f0;
+  padding: 0.6rem;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
+  font-size: 0.7rem;
+  box-sizing: border-box;
 }
 #client-dashboard #add-job #add-job-form .form-group input[type=number]:focus,
 #client-dashboard #add-job #add-job-form .form-group input[type=text]:focus,
 #client-dashboard #add-job #add-job-form .form-group input[type=datetime-local]:focus {
-  outline: none;
   border-color: #4a90e2;
-  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
 }
 #client-dashboard #add-job #add-job-form .form-group .dimensions {
-  display: flex;
-  gap: 1rem;
-}
-#client-dashboard #add-job #add-job-form .form-group .dimensions input {
-  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
 }
 #client-dashboard #add-job #add-job-form .submit-btn {
   width: 100%;
-  padding: 1rem;
-  background-color: #4a90e2;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-#client-dashboard #add-job #add-job-form .submit-btn:hover {
-  background-color: #2275d7;
-  transform: translateY(-2px);
-}
-#client-dashboard #add-job #add-job-form .submit-btn:active {
-  transform: translateY(0);
-}
-#client-dashboard #client-jobs {
-  width: 100%;
-}
-#client-dashboard #client-jobs .jobs-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-#client-dashboard #client-jobs .jobs-table thead {
-  background: #f5f5f5;
-}
-#client-dashboard #client-jobs .jobs-table thead th {
-  padding: 1rem;
-  text-align: left;
-  font-weight: 600;
-  color: #2d3748;
-  border-bottom: 2px solid #e2e8f0;
-}
-#client-dashboard #client-jobs .jobs-table tbody tr {
-  border-bottom: 1px solid #e2e8f0;
-  transition: all 0.3s ease;
-}
-#client-dashboard #client-jobs .jobs-table tbody tr:hover {
-  background: rgba(74, 144, 226, 0.05);
-}
-#client-dashboard #client-jobs .jobs-table tbody tr td {
-  padding: 1rem;
-  color: #2d3748;
-}
-#client-dashboard #client-jobs .jobs-table tbody tr td .delete-btn {
-  padding: 0.5rem 1rem;
+  padding: 0.8rem;
   background: #4a90e2;
   color: white;
   border: none;
   border-radius: 8px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  margin-top: 1rem;
 }
-#client-dashboard #client-jobs .jobs-table tbody tr td .delete-btn:hover {
+#client-dashboard #add-job #add-job-form .submit-btn:hover {
   background: #2275d7;
+  transform: translateY(-1px);
+}
+#client-dashboard #client-jobs .table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+#client-dashboard #client-jobs .jobs-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+#client-dashboard #client-jobs .jobs-table th, #client-dashboard #client-jobs .jobs-table td {
+  padding: 0.75rem;
+  text-align: left;
+  max-height: 100px;
+  overflow-y: auto;
+  word-wrap: break-word;
+  word-break: break-word;
+  line-height: 1.4;
+}
+#client-dashboard #client-jobs .jobs-table th {
+  background: #f8fafc;
+  font-weight: 600;
+  border-bottom: 2px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+}
+#client-dashboard #client-jobs .jobs-table td {
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: middle;
+  height: 100%;
+}
+#client-dashboard #client-jobs .jobs-table tbody tr:hover {
+  background: #f8fafc;
+}
+#client-dashboard #client-jobs .jobs-table th:nth-child(1), #client-dashboard #client-jobs .jobs-table td:nth-child(1) {
+  width: 7%;
+}
+#client-dashboard #client-jobs .jobs-table th:nth-child(2), #client-dashboard #client-jobs .jobs-table td:nth-child(2) {
+  width: 6%;
+}
+#client-dashboard #client-jobs .jobs-table th:nth-child(3), #client-dashboard #client-jobs .jobs-table td:nth-child(3) {
+  width: 8%;
+}
+#client-dashboard #client-jobs .jobs-table th:nth-child(4), #client-dashboard #client-jobs .jobs-table td:nth-child(4) {
+  width: 12%;
+}
+#client-dashboard #client-jobs .jobs-table th:nth-child(5), #client-dashboard #client-jobs .jobs-table td:nth-child(5) {
+  width: 10%;
+}
+#client-dashboard #client-jobs .jobs-table th:nth-child(6), #client-dashboard #client-jobs .jobs-table td:nth-child(6) {
+  width: 12%;
+}
+#client-dashboard #client-jobs .jobs-table th:nth-child(7), #client-dashboard #client-jobs .jobs-table td:nth-child(7) {
+  width: 10%;
+}
+#client-dashboard #client-jobs .jobs-table th:nth-child(8), #client-dashboard #client-jobs .jobs-table td:nth-child(8) {
+  width: 6%;
+}
+#client-dashboard #client-jobs .jobs-table th:nth-child(9), #client-dashboard #client-jobs .jobs-table td:nth-child(9) {
+  width: 7%;
+}
+#client-dashboard #client-jobs .jobs-table th:nth-child(10), #client-dashboard #client-jobs .jobs-table td:nth-child(10) {
+  width: 8%;
+}
+#client-dashboard #client-jobs .jobs-table th:nth-child(11), #client-dashboard #client-jobs .jobs-table td:nth-child(11) {
+  width: 7%;
+}
+#client-dashboard #client-jobs .jobs-table th:nth-child(12), #client-dashboard #client-jobs .jobs-table td:nth-child(12) {
+  width: 10%;
+}
+#client-dashboard #client-jobs .jobs-table .delete-btn, #client-dashboard #client-jobs .jobs-table .sub-btn {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 0.2rem;
+  white-space: nowrap;
+}
+#client-dashboard #client-jobs .jobs-table .delete-btn {
+  background: #f56565;
+  color: white;
+}
+#client-dashboard #client-jobs .jobs-table .delete-btn:hover {
+  background: #e53e3e;
+}
+#client-dashboard #client-jobs .jobs-table .sub-btn {
+  background: #4299e1;
+  color: white;
+}
+#client-dashboard #client-jobs .jobs-table .sub-btn:hover {
+  background: #3182ce;
+}
+#client-dashboard #client-jobs .jobs-table .sub-btn.subscribed {
+  background: #48bb78;
+}
+#client-dashboard #client-jobs .jobs-table .sub-btn.subscribed:hover {
+  background: #38a169;
 }
 
+@media (max-width: 1024px) {
+  #client-dashboard {
+    grid-template-columns: 1fr;
+  }
+  #client-dashboard #add-job {
+    position: static;
+  }
+}
 #invite-driver-dashboard {
   display: flex;
   flex-direction: column;
@@ -487,6 +624,11 @@ body {
   background: #2275d7;
 }
 
+#spedytor-dashboard {
+  padding: 0 2rem;
+  max-width: 1900px;
+  margin: 0 auto;
+}
 #spedytor-dashboard .drivers-section .managed-drivers .header {
   display: flex;
   justify-content: space-between;
@@ -561,177 +703,154 @@ body {
   background: #2275d7;
 }
 
-#driver-dashboard .drivers-section,
-#driver-dashboard .assigned-jobs-section {
-  margin-top: 2rem;
+#driver-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1800px;
+  width: 1800px;
+  margin: 80px auto 0;
 }
-#driver-dashboard .drivers-section .managed-by .header,
-#driver-dashboard .drivers-section .jobs-container .header,
-#driver-dashboard .assigned-jobs-section .managed-by .header,
-#driver-dashboard .assigned-jobs-section .jobs-container .header {
+#driver-dashboard .drivers-section {
+  padding: 2rem;
+}
+#driver-dashboard .drivers-section, #driver-dashboard .invitations-section, #driver-dashboard .assigned-jobs-section {
+  background: white;
+  border-radius: 8px;
+  padding-top: 2rem;
+}
+#driver-dashboard .drivers-section h3, #driver-dashboard .invitations-section h3, #driver-dashboard .assigned-jobs-section h3 {
+  margin: 0 0 1.5rem 0;
+  color: #2d3748;
+  font-size: 1.2rem;
+}
+#driver-dashboard .spedytors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+#driver-dashboard .spedytors-grid .spedytor-card {
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
 }
-#driver-dashboard .drivers-section .managed-by .header h3,
-#driver-dashboard .drivers-section .jobs-container .header h3,
-#driver-dashboard .assigned-jobs-section .managed-by .header h3,
-#driver-dashboard .assigned-jobs-section .jobs-container .header h3 {
-  font-size: 1.5rem;
-  color: #4a90e2;
-  margin: 0;
+#driver-dashboard .spedytors-grid .spedytor-card .status-indicator {
+  padding: 0.3rem 0.6rem;
+  border-radius: 1rem;
+  font-size: 0.8rem;
 }
-#driver-dashboard .drivers-section .spedytors-grid,
-#driver-dashboard .drivers-section .jobs-grid,
-#driver-dashboard .assigned-jobs-section .spedytors-grid,
-#driver-dashboard .assigned-jobs-section .jobs-grid {
+#driver-dashboard .spedytors-grid .spedytor-card .status-indicator.online {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+#driver-dashboard .spedytors-grid .spedytor-card .status-indicator.offline {
+  background: #fafafa;
+  color: #616161;
+}
+#driver-dashboard .invitations-section .invitations-container {
   display: flex;
-  overflow-x: auto;
   gap: 1rem;
-  padding-bottom: 1rem;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+  margin: 0 -2rem;
+  padding: 0 2rem;
+  scroll-behavior: smooth;
 }
-#driver-dashboard .drivers-section .spedytors-grid::-webkit-scrollbar,
-#driver-dashboard .drivers-section .jobs-grid::-webkit-scrollbar,
-#driver-dashboard .assigned-jobs-section .spedytors-grid::-webkit-scrollbar,
-#driver-dashboard .assigned-jobs-section .jobs-grid::-webkit-scrollbar {
+#driver-dashboard .invitations-section .invitations-container::-webkit-scrollbar {
   height: 8px;
 }
-#driver-dashboard .drivers-section .spedytors-grid::-webkit-scrollbar-track,
-#driver-dashboard .drivers-section .jobs-grid::-webkit-scrollbar-track,
-#driver-dashboard .assigned-jobs-section .spedytors-grid::-webkit-scrollbar-track,
-#driver-dashboard .assigned-jobs-section .jobs-grid::-webkit-scrollbar-track {
-  background: #f5f5f5;
+#driver-dashboard .invitations-section .invitations-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
   border-radius: 4px;
 }
-#driver-dashboard .drivers-section .spedytors-grid::-webkit-scrollbar-thumb,
-#driver-dashboard .drivers-section .jobs-grid::-webkit-scrollbar-thumb,
-#driver-dashboard .assigned-jobs-section .spedytors-grid::-webkit-scrollbar-thumb,
-#driver-dashboard .assigned-jobs-section .jobs-grid::-webkit-scrollbar-thumb {
-  background: #4a90e2;
+#driver-dashboard .invitations-section .invitations-container::-webkit-scrollbar-thumb {
+  background: #888;
   border-radius: 4px;
-}
-#driver-dashboard .drivers-section .spedytor-card,
-#driver-dashboard .drivers-section .job-card,
-#driver-dashboard .assigned-jobs-section .spedytor-card,
-#driver-dashboard .assigned-jobs-section .job-card {
-  background: #f5f5f5;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  min-width: 250px;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.8rem;
-}
-#driver-dashboard .drivers-section .spedytor-card .name,
-#driver-dashboard .drivers-section .spedytor-card .job-title,
-#driver-dashboard .drivers-section .job-card .name,
-#driver-dashboard .drivers-section .job-card .job-title,
-#driver-dashboard .assigned-jobs-section .spedytor-card .name,
-#driver-dashboard .assigned-jobs-section .spedytor-card .job-title,
-#driver-dashboard .assigned-jobs-section .job-card .name,
-#driver-dashboard .assigned-jobs-section .job-card .job-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #2d3748;
-}
-#driver-dashboard .drivers-section .spedytor-card .email,
-#driver-dashboard .drivers-section .spedytor-card .job-details,
-#driver-dashboard .drivers-section .job-card .email,
-#driver-dashboard .drivers-section .job-card .job-details,
-#driver-dashboard .assigned-jobs-section .spedytor-card .email,
-#driver-dashboard .assigned-jobs-section .spedytor-card .job-details,
-#driver-dashboard .assigned-jobs-section .job-card .email,
-#driver-dashboard .assigned-jobs-section .job-card .job-details {
-  font-size: 0.9rem;
-  color: #2d3748;
-  opacity: 0.8;
-}
-#driver-dashboard .drivers-section .spedytor-card .status-indicator,
-#driver-dashboard .drivers-section .job-card .status-indicator,
-#driver-dashboard .assigned-jobs-section .spedytor-card .status-indicator,
-#driver-dashboard .assigned-jobs-section .job-card .status-indicator {
-  padding: 0.4rem 0.8rem;
-  border-radius: 1rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-#driver-dashboard .drivers-section .spedytor-card .status-indicator.online, #driver-dashboard .drivers-section .spedytor-card .status-indicator.active,
-#driver-dashboard .drivers-section .job-card .status-indicator.online,
-#driver-dashboard .drivers-section .job-card .status-indicator.active,
-#driver-dashboard .assigned-jobs-section .spedytor-card .status-indicator.online,
-#driver-dashboard .assigned-jobs-section .spedytor-card .status-indicator.active,
-#driver-dashboard .assigned-jobs-section .job-card .status-indicator.online,
-#driver-dashboard .assigned-jobs-section .job-card .status-indicator.active {
-  background: rgba(104, 211, 145, 0.1);
-  color: #68d391;
-}
-#driver-dashboard .drivers-section .spedytor-card .status-indicator.offline, #driver-dashboard .drivers-section .spedytor-card .status-indicator.inactive,
-#driver-dashboard .drivers-section .job-card .status-indicator.offline,
-#driver-dashboard .drivers-section .job-card .status-indicator.inactive,
-#driver-dashboard .assigned-jobs-section .spedytor-card .status-indicator.offline,
-#driver-dashboard .assigned-jobs-section .spedytor-card .status-indicator.inactive,
-#driver-dashboard .assigned-jobs-section .job-card .status-indicator.offline,
-#driver-dashboard .assigned-jobs-section .job-card .status-indicator.inactive {
-  background: rgba(252, 129, 129, 0.1);
-  color: #fc8181;
-}
-#driver-dashboard .invitations-section {
-  margin-top: 2rem;
-  padding: 1.5rem 0;
 }
 #driver-dashboard .invitations-section .invitation-card {
+  min-width: 300px;
+  max-width: 300px;
+  padding: 1rem;
   background: white;
-  padding: 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 8px;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 #driver-dashboard .invitations-section .invitation-card p {
-  font-size: 1.1rem;
-  color: #2d3748;
   margin: 0;
-  text-align: center;
+  font-size: 0.9rem;
+  color: #2d3748;
 }
 #driver-dashboard .invitations-section .invitation-card .invitation-actions {
   display: flex;
-  gap: 0.8rem;
-  justify-content: center;
-  width: 100%;
-}
-#driver-dashboard .invitations-section .invitation-card .invitation-actions form {
-  flex: 1;
-  max-width: 150px;
+  gap: 0.5rem;
 }
 #driver-dashboard .invitations-section .invitation-card .invitation-actions button {
-  width: 100%;
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 8px;
+  flex: 1;
+  padding: 0.5rem;
+  font-size: 0.8rem;
   font-weight: 500;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 #driver-dashboard .invitations-section .invitation-card .invitation-actions button.btn-accept {
-  background: #68d391;
+  background: #4caf50;
   color: white;
 }
 #driver-dashboard .invitations-section .invitation-card .invitation-actions button.btn-accept:hover {
-  background: #41c774;
+  background: #43a047;
 }
 #driver-dashboard .invitations-section .invitation-card .invitation-actions button.btn-reject {
-  background: #fc8181;
+  background: #f44336;
   color: white;
 }
 #driver-dashboard .invitations-section .invitation-card .invitation-actions button.btn-reject:hover {
-  background: #fb4f4f;
+  background: #e53935;
+}
+#driver-dashboard .jobs-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+#driver-dashboard .jobs-table th, #driver-dashboard .jobs-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 0.9rem;
+}
+#driver-dashboard .jobs-table th {
+  font-weight: 600;
+  color: #2d3748;
+  background: #f5f5f5;
+}
+#driver-dashboard .jobs-table .btn-update {
+  padding: 0.5rem 1rem;
+  background: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+#driver-dashboard .jobs-table .status-pending {
+  color: #f57c00;
+}
+#driver-dashboard .jobs-table .status-in-progress {
+  color: #1976d2;
+}
+#driver-dashboard .jobs-table .status-completed {
+  color: #388e3c;
+}
+#driver-dashboard .jobs-table .status-cancelled {
+  color: #d32f2f;
 }
 
 .popup-message {
@@ -785,4 +904,95 @@ body {
 .popup__message {
   margin: 0;
   color: #666;
+}
+
+.update-job-form {
+  max-width: 600px;
+  margin: 100px auto 0;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+}
+.update-job-form h2 {
+  color: #2d3748;
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #4a90e2;
+}
+.update-job-form .form-group {
+  margin-bottom: 1.5rem;
+}
+.update-job-form .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #2d3748;
+  font-weight: 500;
+}
+.update-job-form .form-group select, .update-job-form .form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+.update-job-form .form-group select:focus, .update-job-form .form-group textarea:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+.update-job-form .form-group select {
+  background-color: white;
+  cursor: pointer;
+}
+.update-job-form .form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+.update-job-form .job-details {
+  background: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+.update-job-form .job-details p {
+  margin: 0.5rem 0;
+  color: #2d3748;
+  font-size: 0.95rem;
+}
+.update-job-form .job-details p strong {
+  color: #191f29;
+  margin-right: 0.5rem;
+}
+.update-job-form .btn-submit {
+  width: 100%;
+  padding: 1rem;
+  background: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.update-job-form .btn-submit:hover {
+  background: #3483de;
+  transform: translateY(-1px);
+}
+.update-job-form .btn-submit:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 640px) {
+  .update-job-form {
+    margin: 80px 1rem 0;
+    padding: 1.5rem;
+  }
+  .update-job-form h2 {
+    font-size: 1.25rem;
+  }
 }/*# sourceMappingURL=style.css.map */
