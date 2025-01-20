@@ -6,6 +6,9 @@ async function removeDriver(driverId) {
 
     if (response.ok) {
         window.location.reload()
+    } else {
+        const data = await response.json()
+        showPopUp('Error',data.error,'error')
     }
 }
 
@@ -16,11 +19,15 @@ async function acceptJob(jobId) {
     });
 
     if (response.ok) {
-        window.location.reload()
+        showPopUp('Success', 'Job accepted successfully', 'success');
+        window.location.reload();
+    } else {
+        const data = await response.json();
+        showPopUp('Error', data.error, 'error');
     }
 }
 
-async function deleteJob(jobId) {
+async function resignFromJob(jobId) {
     const response = await fetch(`/api/job/${jobId}/delete`, {
         method: 'DELETE',
         credentials: 'include'
@@ -29,7 +36,7 @@ async function deleteJob(jobId) {
     if (response.ok) {
         window.location.reload()
     } else {
-        const data = await response.json()
-        errorPopUp('Error', data.error )
+        const data = await response.json();
+        showPopUp('Error', data.error, 'error');
     }
 }

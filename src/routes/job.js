@@ -29,6 +29,7 @@ router.post('/add', auth, async (req, res) => {
             status: 'active'
         });
         await job.save();
+        mqttClient.publish('new-jobs',JSON.stringify({message:'Someone published new job!'}))
         res.redirect('/dashboard')
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -73,6 +74,8 @@ router.delete('/remove-job/:id', auth, async (req, res) => {
 
 // Przyjmowanie zlecenia przez spedytora
 router.patch('/:id/accept', auth, async (req, res) => {
+    ;
+    
     try {
         const job = await Job.findOne({ 
             _id: req.params.id, 
@@ -85,6 +88,7 @@ router.patch('/:id/accept', auth, async (req, res) => {
 
         job.status = 'assigned';
         job.spedytorId = req.user.id;
+        mqttClient.publish(`${job._id}`,JSON.stringify({status:job.status}))
         await job.save();
 
         res.status(200).json('Job accepted')
@@ -113,6 +117,7 @@ router.delete('/:id/delete', auth, async (req, res) => {
 
         job.status = 'active';
         job.spedytorId = null;
+        mqttClient.publish(`${job._id}`,JSON.stringify({status:job.status}))
         await job.save();
 
         res.status(200).json('Zrezygnowano ze zlecenia');
@@ -274,16 +279,38 @@ router.delete('/remove-driver/:driverId', auth, async (req, res) => {
     // Szukanie prac, które są już rozpoczęte, lub których nie można już anulować
     const upcomingJobs = await Job.find({
         driverId: existingDriver._id,
-        status: "assigned",
-        startDate: { 
-            $lt: new Date(Date.now() + (12 * 60 * 60 * 1000)) // less than 12 hours from now
+        status: {
+            $in: [
+                'assigned',
+                'heading_to_pickup',
+                'waiting_for_pickup',
+                'picked_up',
+                'in_transit',
+                'at_delivery'
+            ]
         }
     });
 
     if (upcomingJobs.length > 0) {
-        return res.status(400).json({ 
-            error: 'Nie można usunąć kierowcy, który ma przypisane zlecenia rozpoczynające się w ciągu najbliższych 12 godzin' 
-        });
+        // Check for active jobs (any status except 'assigned')
+        const activeJobs = upcomingJobs.filter(job => job.status !== 'assigned');
+        if (activeJobs.length > 0) {
+            return res.status(400).json({
+                error: 'Nie można usunąć kierowcy, który ma aktywne zlecenia'
+            });
+        }
+
+        // Check for upcoming jobs within 12 hours
+        const jobsStartingSoon = upcomingJobs.filter(job => 
+            job.status === 'assigned' && 
+            job.pickup.date < new Date(Date.now() + (12 * 60 * 60 * 1000))
+        );
+        
+        if (jobsStartingSoon.length > 0) {
+            return res.status(400).json({
+                error: 'Nie można usunąć kierowcy, który ma zlecenia rozpoczynające się w ciągu najbliższych 12 godzin'
+            });
+        }
     }
     
     // Zaktualizowanie prac, które miał przypisane kierowca,
@@ -306,6 +333,15 @@ router.delete('/remove-driver/:driverId', auth, async (req, res) => {
         },
         { new: true }
     );
+
+    
+
+    global.io.to(existingDriver.id.toString()).emit('removed-by-spedytor', {
+        spedytorId: req.user.id,
+        spedytorEmail: req.user.email,
+        spedytorName: req.user.name,
+        spedytorSurname: req.user.surname
+    });
 
     res.status(200).json('Sucessfully removed driver')
 })
@@ -342,7 +378,9 @@ router.patch('/respond-invitation/:invitationId', auth, async (req, res) => {
             // Emitowanie zaproszenia do spedytora - to w przypadku gdy jest online
             global.io.to(invitation.spedytorId._id.toString()).emit('driver_accepted', {
                 driverId: req.user.id,
-                driverEmail: req.user.email
+                driverEmail: req.user.email,
+                driverName: req.user.name,
+                driverSurname: req.user.surname
             });
 
         } else {
@@ -353,7 +391,9 @@ router.patch('/respond-invitation/:invitationId', auth, async (req, res) => {
 
             global.io.to(invitation.spedytorId._id.toString()).emit('driver_rejected', {
                 driverId: req.user.id,
-                driverEmail: req.user.email
+                driverEmail: req.user.email,
+                driverName: req.user.name,
+                driverSurname: req.user.surname
             });
         }
 
@@ -368,7 +408,7 @@ router.patch('/respond-invitation/:invitationId', auth, async (req, res) => {
 router.patch('/assign-driver/:driverId/:jobId', auth ,async (req, res) => {
 
     // Przypisanie kierowcy do zlecenia
-    await Job.findOneAndUpdate(
+    const job = await Job.findOneAndUpdate(
         {
             _id: req.params.jobId,
             spedytorId: req.user.id,
@@ -377,8 +417,15 @@ router.patch('/assign-driver/:driverId/:jobId', auth ,async (req, res) => {
             $set: {
                 driverId: req.params.driverId
             }
-        }
+        },
+        {new: true}
     )
+
+    global.io.to(req.params.driverId).emit('new_job', {
+        job: job,
+        spedytorName: req.user.name,
+        spedytorSurname: req.user.surname
+    });
 
     res.status(200).json('Driver assigned successfully')
 })
@@ -390,6 +437,9 @@ router.get('/assigned-jobs', auth, async (req, res) => {
         const assignedJobs = await Job.find({
             driverId: req.user.id
         })
+        
+        
+
         res.status(200).json(assignedJobs)
 
         

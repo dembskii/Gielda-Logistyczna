@@ -89,7 +89,11 @@ document.addEventListener('DOMContentLoaded', () => {
     client.on('message', (topic, message) => {
         console.log('Received:', topic, message.toString());
         const data = JSON.parse(message.toString());
-        createPopup(`Status zlecenia ${topic.split('/')[1]} zmieniony na: ${data.status}`);
+        if (data.status) {
+            createPopup(`Status zlecenia ${topic.split('/')[1]} zmieniony na: ${data.status}`);
+        } else {
+            createPopup(`${data.message}`);
+        }
     });
 
 

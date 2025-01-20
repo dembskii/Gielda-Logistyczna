@@ -1,18 +1,4 @@
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const socket = io();
-        const userId = '<%= user.id %>';
-        const userRole = '<%= user.role %>';
-        
-        // Przeładowywanie okna, gdy driver zaakceptuje zaproszenie
-        if (userRole === 'spedytor') {
-            socket.on('driver_accepted', () => {
-                console.log("Zaakceptowano zaproszenie");
-                
-                window.location.reload();
-            });
-        }
-    });
 
     function assignDriver(jobId) {
     const driverId = document.getElementById(`driverSelect_${jobId}`).value;
@@ -124,15 +110,35 @@
                             <% }}); %>
                         </select>
                         <button onclick="assignDriver('<%= job._id %>')" class="assign-btn">Ustaw</button>
-                        <button onclick="deleteJob('<%= job._id %>')" class="delete-btn">Zrezygnuj</button>
+                        <button onclick="resignFromJob('<%= job._id %>')" class="delete-btn">Zrezygnuj</button>
                     </td>
                 </tr>
             <% }); %>
         </tbody>
     </table>
-
-    <table id="all-jobs" class="jobs-table">
+    <div class="table-header">
         <h3>Wszystkie zlecenia</h3>
+        <% const isSubscribed = user.subscribedUrls && user.subscribedUrls.includes('new-jobs'); %>
+        <% if (isSubscribed) { %>
+            <button 
+                class="sub-btn subscribed"
+                data-job-id="new-jobs"
+                onclick="unsubscribe('new-jobs')"
+            >
+                Wyłącz powiadomienia
+            </button>
+        <% } else { %>
+            <button 
+                class="sub-btn"
+                data-job-id="new-jobs"
+                onclick="subscribe('new-jobs')"
+            >
+                Powiadamiaj o nowych zleceniach
+            </button>
+        <% } %>
+        </div>
+    <table id="all-jobs" class="jobs-table">
+        
         <thead>
             <tr>
                 <th>Cena</th>

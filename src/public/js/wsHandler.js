@@ -15,7 +15,7 @@ const socket = io();
      });
 
 
-     // Status update handling
+     
      socket.on('status_update', ({ userId, isOnline }) => {
          const statusElements = document.querySelectorAll(`[data-user-status="${userId}"]`);
          statusElements.forEach(element => {
@@ -60,6 +60,112 @@ const socket = io();
              invitationsList.insertAdjacentHTML('beforeend', newInvitation);
          }
      });
+
+    //  Usunięcie spedytora 
+    socket.on('removed-by-spedytor', (data) => {
+        console.log(data);
+        
+        showPopUp(
+            'Zostałeś usunięty', 
+            `Spedytor ${data.spedytorName} ${data.spedytorSurname} usunął Cię z listy kierowców`,
+            'error'
+        );
+        
+        const spedytorsGrid = document.querySelector('.spedytors-grid');
+        const spedytorCard = spedytorsGrid.querySelector(`[data-spedytor-id="${data.spedytorId}"]`);
+        
+        Array.from(spedytorsGrid.children).forEach(childCard => {
+            console.log(`${childCard.dataset.spedytorId} === ${data.spedytorId}`);
+            
+            if (childCard.dataset.spedytorId === data.spedytorId) {
+                childCard.remove()
+            }
+        })
+
+        if (spedytorsGrid.children.length === 0) {
+            spedytorsGrid.innerHTML = '<p>Brak przypisanych spedytorów</p>';
+        }
+
+        const jobsTable = document.querySelector('.jobs-table tbody');
+        if (jobsTable) {
+            Array.from(jobsTable.children).forEach(jobRow => {
+                if (jobRow.dataset.spedytorId === data.spedytorId) {
+                    jobRow.remove();
+                }
+            });
+
+        
+        if (jobsTable.children.length === 0) {
+            const assignedJobsSection = document.querySelector('.assigned-jobs-section');
+            assignedJobsSection.innerHTML = '<p>Brak przypisanych prac</p>';
+        }
+    }
+        })
+        
+        socket.on('new_job', (data) => {
+            showPopUp(
+                'Nowe zlecenie', 
+                `Otrzymałeś nowe zlecenie od ${data.spedytorName} ${data.spedytorSurname}`,
+                'success'
+            );
+            
+            const assignedJobsSection = document.querySelector('.assigned-jobs-section');
+            let jobsTable = assignedJobsSection.querySelector('.jobs-table');
+        if (!jobsTable) {
+            const tableHTML = `
+                <table class="jobs-table">
+                    <thead>
+                        <tr>
+                            <th>Cena</th>
+                            <th>Waga</th>
+                            <th>Wymiary</th>
+                            <th>Adres odbioru</th>
+                            <th>Data odbioru</th>
+                            <th>Adres dostawy</th>
+                            <th>Data dostawy</th>
+                            <th>Odległość</th>
+                            <th>Status</th>
+                            <th>Akcje</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            `;
+            assignedJobsSection.innerHTML = tableHTML;
+            jobsTable = assignedJobsSection.querySelector('.jobs-table');
+        }
+
+            const newJobRow = `
+                <tr data-spedytor-id="${data.job.spedytorId}">
+                    <td>${data.job.price} PLN</td>
+                    <td>${data.job.weight} kg</td>
+                    <td>${data.job.dimensions.length}x${data.job.dimensions.width}x${data.job.dimensions.height} cm</td>
+                    <td>${data.job.pickup.address}</td>
+                    <td>${new Date(data.job.pickup.date).toLocaleString()}</td>
+                    <td>${data.job.delivery.address}</td>
+                    <td>${new Date(data.job.delivery.date).toLocaleString()}</td>
+                    <td>${data.job.distance} km</td>
+                    <td class="status-${data.job.status}">${data.job.status}</td>
+                    <td>
+                        <form action="/dashboard/update-job" method="GET">
+                            <input type="hidden" name="jobId" value="${data.job._id}">
+                            <button type="submit" class="btn-update">Aktualizuj status</button>
+                        </form>
+                    </td>
+                </tr>
+            `;
+
+            const tbody = jobsTable.querySelector('tbody');
+            if (tbody) {
+                const noJobsMessage = assignedJobsSection.querySelector('p');
+                if (noJobsMessage) {
+                    noJobsMessage.remove();
+                }
+                tbody.insertAdjacentHTML('beforeend', newJobRow);
+            }
+        })
+     
+
      }
          
 
@@ -67,14 +173,46 @@ const socket = io();
      if (userRole === 'spedytor') {
          // Powiadamianie o tym, że spedytor otrzymał odpowiedź
          socket.on('driver_accepted', (data) => {
-             window.location.reload();
+            showPopUp('Zaproszenie zaakceptowane',`${data.driverName} ${data.driverSurname} przyjął twoje zaproszenie`,'success')
+            const driversGrid = document.querySelector('.drivers-grid');
+            if (driversGrid) {
+                
+                const newDriverCard = `
+                    <div class="driver-card">
+                        <div class="driver-name">
+                            ${data.driverName} ${data.driverSurname}
+                        </div>
+                        <div class="status-indicator online" data-user-status="${data.driverId}">
+                            Dostępny(a)
+                        </div>
+                        <button 
+                            onclick="removeDriver('${data.driverId}')" 
+                            class="btn-remove"
+                        >
+                            Usuń kierowcę
+                        </button>
+                    </div>
+                `;
+                driversGrid.insertAdjacentHTML('beforeend', newDriverCard);
+
+            }
+            const allSelects = document.querySelectorAll('select[id^="driverSelect_"]');
+            allSelects.forEach(select => {
+                if (!select.querySelector(`option[value="${data.driverId}"]`)) {
+                    const newOption = `
+                        <option value="${data.driverId}">
+                            ${data.driverName} ${data.driverSurname}
+                        </option>
+                    `;
+                    select.insertAdjacentHTML('beforeend', newOption);
+                }
+            });
+            
+            
          });
 
          socket.on('driver_rejected', (data) => {
-             window.location.reload()
+            showPopUp('Zaproszenie odrzucone',`${data.driverName} ${data.driverSurname} odrzucił twoje zaproszenie`,'error')
          });
 
-
-
-     
      }

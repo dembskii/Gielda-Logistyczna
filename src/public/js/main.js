@@ -1,8 +1,8 @@
-function errorPopUp(title, message) {
+function showPopUp(title, message, type = 'error') {
     let container = document.getElementById('popup-container');
 
     const popup = document.createElement('div');
-    popup.className = 'popup';
+    popup.className = `popup popup--${type}`;
     popup.innerHTML = `
         <h4 class="popup__title">${title}</h4>
         <p class="popup__message">${message}</p>

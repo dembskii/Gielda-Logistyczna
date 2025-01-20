@@ -40,5 +40,8 @@ async function updateJobStatus(event) {
 
     if (response.ok) {
         window.location.href= '/dashboard';
+    } else {
+        const data = await response.json()
+        errorPopUp('Error', data.message )
     }
 }

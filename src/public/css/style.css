@@ -154,6 +154,39 @@ body {
   margin-top: 80px;
 }
 
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0 1rem;
+}
+.table-header h3 {
+  margin: 0;
+  color: #2d3748;
+  font-size: 1.2rem;
+}
+.table-header .sub-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #4a90e2;
+  color: white;
+}
+.table-header .sub-btn:hover {
+  background: #2275d7;
+  transform: translateY(-1px);
+}
+.table-header .sub-btn.subscribed {
+  background: #48bb78;
+}
+.table-header .sub-btn.subscribed:hover {
+  background: #38a169;
+}
+
 .jobs-table {
   width: 100%;
   font-size: 0.875rem;
@@ -627,7 +660,7 @@ body {
 #spedytor-dashboard {
   padding: 0 2rem;
   max-width: 1900px;
-  margin: 0 auto;
+  margin: 40px auto;
 }
 #spedytor-dashboard .drivers-section .managed-drivers .header {
   display: flex;
@@ -710,7 +743,7 @@ body {
   padding: 2rem;
   max-width: 1800px;
   width: 1800px;
-  margin: 80px auto 0;
+  margin: 130px auto 0;
 }
 #driver-dashboard .drivers-section {
   padding: 2rem;
@@ -883,7 +916,7 @@ body {
 
 .popup {
   background-color: #fff;
-  border-left: 4px solid #ff3333;
+  border-left: 4px solid;
   border-radius: 4px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   padding: 16px;
@@ -897,9 +930,20 @@ body {
   opacity: 1;
   transform: translateY(0);
 }
+.popup--error {
+  border-left-color: #ff3333;
+}
+.popup--error .popup__title {
+  color: #ff3333;
+}
+.popup--success {
+  border-left-color: #28a745;
+}
+.popup--success .popup__title {
+  color: #28a745;
+}
 .popup__title {
   margin: 0 0 5px 0;
-  color: #ff3333;
 }
 .popup__message {
   margin: 0;

@@ -9,6 +9,12 @@ $navbar-height: 60px;
 $navbar-bg: white;
 $text-dark: #2d3748;
 
+$popup-error-color: #ff3333;
+$popup-success-color: #28a745;
+$popup-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+$popup-text: #666;
+$popup-bg: #fff;
+
 .navbar {
   position: fixed;
   top: 0;
@@ -186,6 +192,44 @@ $status-rejected: #fc8181;
   margin-top: $navbar-height + 20px;
 }
 
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0 1rem;
+
+  h3 {
+    margin: 0;
+    color: $text-dark;
+    font-size: 1.2rem;
+  }
+
+  .sub-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: $border-radius;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: $transition;
+    background: $primary-color;
+    color: white;
+
+    &:hover {
+      background: darken($primary-color, 10%);
+      transform: translateY(-1px);
+    }
+
+    &.subscribed {
+      background: #48bb78;
+      
+      &:hover {
+        background: #38a169;
+      }
+    }
+  }
+}
+
 .jobs-table {
   width: 100%;
   font-size: 0.875rem;
@@ -197,6 +241,8 @@ $status-rejected: #fc8181;
   box-shadow: 0 4px 6px $shadow-color;
   margin-bottom: 2rem;
   overflow: hidden;
+
+  
 
   thead {
     background: #f8fafc;
@@ -670,7 +716,8 @@ $status-rejected: #fc8181;
 #spedytor-dashboard {
   padding: 0 2rem;
   max-width: 1900px;
-  margin: 0 auto;
+  margin: $navbar-height - 20px auto;
+  
   .drivers-section {
     .managed-drivers {
       .header {
@@ -770,7 +817,7 @@ $status-rejected: #fc8181;
   padding: 2rem;
   max-width: 1800px;
   width: 1800px;
-  margin: $navbar-height + 20px auto 0;
+  margin: $navbar-height + 70px auto 0;
 
   .drivers-section {
     padding: 2rem;
@@ -955,10 +1002,10 @@ $status-rejected: #fc8181;
 }
 
 .popup {
-  background-color: #fff;
-  border-left: 4px solid #ff3333;
+  background-color: $popup-bg;
+  border-left: 4px solid;
   border-radius: 4px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  box-shadow: $popup-shadow;
   padding: 16px;
   margin-bottom: 10px;
   min-width: 300px;
@@ -967,18 +1014,33 @@ $status-rejected: #fc8181;
   transition: all 0.3s ease;
 
   &.show {
-      opacity: 1;
-      transform: translateY(0);
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  &--error {
+    border-left-color: $popup-error-color;
+    
+    .popup__title {
+      color: $popup-error-color;
+    }
+  }
+
+  &--success {
+    border-left-color: $popup-success-color;
+    
+    .popup__title {
+      color: $popup-success-color;
+    }
   }
 
   &__title {
-      margin: 0 0 5px 0;
-      color: #ff3333;
+    margin: 0 0 5px 0;
   }
 
   &__message {
-      margin: 0;
-      color: #666;
+    margin: 0;
+    color: $popup-text;
   }
 }
 

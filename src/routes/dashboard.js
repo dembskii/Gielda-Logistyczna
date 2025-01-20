@@ -59,12 +59,14 @@ router.get('/', auth ,async (req, res) => {
             ]);
 
             
-            
+            const user = await User.findById(req.user.id)
+            .populate('subscribedUrls')
+
             res.render('spedytorDashboard', {
                 layout: 'layouts/dashboardLayout',
                 jobs: allJobsResponse.data,
                 acceptedJobs:acceptedJobsResponse.data,
-                user:req.user,
+                user:user,
                 freeDrivers: freeDriversResponse.data,
                 managedDrivers: managedDriversResponse.data
             });

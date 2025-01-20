@@ -7,7 +7,7 @@
             <div class="spedytors-grid">
                 <% if (user.spedytorIds && user.spedytorIds.length > 0) { %>
                     <% user.spedytorIds.forEach(spedytor => { %>
-                        <div class="spedytor-card">
+                        <div class="spedytor-card" data-spedytor-id="<%= spedytor._id %>">
                             <div class="spedytor-name">
                                 <%= spedytor.name %> <%= spedytor.surname %>
                             </div>
@@ -52,7 +52,6 @@
         </div>
     </div>
 
-    <div class="assigned-jobs-section">
         <h3>Przypisane prace</h3>
         <% if (assignedJobs && assignedJobs.length > 0) { %>
             <table class="jobs-table">
@@ -72,7 +71,7 @@
                 </thead>
                 <tbody>
                     <% assignedJobs.forEach(job => { %>
-                        <tr>
+                        <tr data-spedytor-id="<%= job.spedytorId %>">
                             <td><%= job.price %> PLN</td>
                             <td><%= job.weight %> kg</td>
                             <td><%= job.dimensions.length %>x<%= job.dimensions.width %>x<%= job.dimensions.height %> cm</td>
