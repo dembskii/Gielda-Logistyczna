@@ -99,7 +99,7 @@ const socket = io();
             const assignedJobsSection = document.querySelector('.assigned-jobs-section');
             assignedJobsSection.innerHTML = '<p>Brak przypisanych prac</p>';
         }
-    }
+        }
         })
         
         socket.on('new_job', (data) => {
@@ -111,26 +111,26 @@ const socket = io();
             
             const assignedJobsSection = document.querySelector('.assigned-jobs-section');
             let jobsTable = assignedJobsSection.querySelector('.jobs-table');
-        if (!jobsTable) {
-            const tableHTML = `
-                <table class="jobs-table">
-                    <thead>
-                        <tr>
-                            <th>Cena</th>
-                            <th>Waga</th>
-                            <th>Wymiary</th>
-                            <th>Adres odbioru</th>
-                            <th>Data odbioru</th>
-                            <th>Adres dostawy</th>
-                            <th>Data dostawy</th>
-                            <th>Odległość</th>
-                            <th>Status</th>
-                            <th>Akcje</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            `;
+            if (!jobsTable) {
+                const tableHTML = `
+                    <table class="jobs-table">
+                        <thead>
+                            <tr>
+                                <th>Cena</th>
+                                <th>Waga</th>
+                                <th>Wymiary</th>
+                                <th>Adres odbioru</th>
+                                <th>Data odbioru</th>
+                                <th>Adres dostawy</th>
+                                <th>Data dostawy</th>
+                                <th>Odległość</th>
+                                <th>Status</th>
+                                <th>Akcje</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                `;
             assignedJobsSection.innerHTML = tableHTML;
             jobsTable = assignedJobsSection.querySelector('.jobs-table');
         }

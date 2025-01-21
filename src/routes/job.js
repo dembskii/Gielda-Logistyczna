@@ -117,8 +117,10 @@ router.delete('/:id/delete', auth, async (req, res) => {
 
         job.status = 'active';
         job.spedytorId = null;
-        mqttClient.publish(`${job._id}`,JSON.stringify({status:job.status}))
+        job.driverId = null;
         await job.save();
+        mqttClient.publish(`${job._id}`,JSON.stringify({status:job.status}))
+
 
         res.status(200).json('Zrezygnowano ze zlecenia');
     } catch (error) {
