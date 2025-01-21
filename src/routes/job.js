@@ -115,10 +115,16 @@ router.delete('/:id/delete', auth, async (req, res) => {
             return res.status(400).json({ error: 'Nie można zrezygnować ze zlecenia na mniej niż 12h przed rozpoczęciem' });
         }
 
+        global.io.to(job.driverId.toString()).emit('removed_job',{
+            job:job,
+            spedytorName: req.user.name,
+            spedytorSurname: req.user.surname
+        })
         job.status = 'active';
         job.spedytorId = null;
         job.driverId = null;
         await job.save();
+
         mqttClient.publish(`${job._id}`,JSON.stringify({status:job.status}))
 
 

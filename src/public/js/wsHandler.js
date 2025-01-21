@@ -164,6 +164,37 @@ const socket = io();
                 tbody.insertAdjacentHTML('beforeend', newJobRow);
             }
         })
+        
+        socket.on('removed_job', (data) => {
+            
+            const assignedJobsSection = document.querySelector('.assigned-jobs-section');
+            if (assignedJobsSection) {
+                const tbody = assignedJobsSection.querySelector('tbody');
+                if (tbody) {
+                    const rows = Array.from(tbody.querySelectorAll('tr'));
+                    const jobRow = rows.find(row => row.dataset.jobId === data.job.jobId);
+                if (jobRow) {
+                    
+                    jobRow.remove();
+                    showPopUp(
+                        'Zlecenie usunięte', 
+                        `Spedytor ${data.spedytorName} ${data.spedytorSurname} zrezygnował z pewnego zlecenia`,
+                        'error'
+                    );
+                    
+                    
+                    if (tbody && tbody.children.length === 0) {
+                        const table = tbody.closest('table');
+                        
+                        table.remove();
+                        
+                        table.parentElement.insertAdjacentHTML('beforeend', '<p>Brak przypisanych prac</p>');
+                    }
+                } 
+                }
+                
+        }
+        })
      
 
      }
