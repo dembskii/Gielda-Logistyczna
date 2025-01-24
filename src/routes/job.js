@@ -13,7 +13,7 @@ router.get('/all', auth, async (req, res) => {
     try {
         const jobs = await Job.find({ status: 'active' })
             .populate('userId', 'email');
-        res.json(jobs)
+        res.status(200).json(jobs)
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
