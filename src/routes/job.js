@@ -411,7 +411,6 @@ router.patch('/respond-invitation/:invitationId', auth, async (req, res) => {
 
         return res.status(200).json('Received invitation successfully')
     } catch (error) {
-        console.error('Error processing invitation:', error);
         return res.status(500).json({ error: error.message });
     }
 });
@@ -510,7 +509,6 @@ router.patch('/update-job-status', auth, async (req, res) => {
         res.status(200).json('Job status updated successfully')
 
     } catch (error) {
-        console.error('Job status update error:', error);
         res.status(500).json({ message: 'Błąd podczas aktualizacji statusu zlecenia' });
     }
 });
