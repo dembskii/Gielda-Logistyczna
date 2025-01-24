@@ -11,7 +11,10 @@ const {auth} = require('../services/authService')
 router.post('/register', async (req, res) => {
     
     try {
-        const user = new User(req.body);
+        const hashedPassword = await bcrypt.hash(req.body.password,10)
+        data = req.body
+        data.password = hashedPassword;
+        const user = new User(data);
         await user.save();
         const token = jwt.sign(
             { 
@@ -43,11 +46,11 @@ router.post('/login',async (req, res) => {
         const { email, password } = req.body;
         // Szukanie użytkownika przez emial
         const user = await User.findOne({ email });
-
+        const hashedPassword = await bcrypt.hash(password,10)
         if (!user) {
             console.log("Nie znaleziono użytkownika");
         }
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(hashedPassword, user.password);
         if (!isMatch) {
             console.log('Niepoprawne hasło');
         }
