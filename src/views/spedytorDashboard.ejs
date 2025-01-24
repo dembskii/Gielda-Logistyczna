@@ -78,7 +78,8 @@
         </thead>
         <tbody>
             <% acceptedJobs.forEach(job => { %>
-                <tr>
+                <tr data-job-id="<%= job._id %>">
+
                     <td><%= job.price %> PLN</td>
                     <td><%= job.weight %> kg</td>
                     <td><%= job.dimensions.length %>x<%= job.dimensions.width %>x<%= job.dimensions.height %> cm</td>

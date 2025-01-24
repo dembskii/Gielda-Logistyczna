@@ -48,6 +48,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 5000);
     }
 
+    function updateJobStatus(jobId, newStatus) {
+        console.log(`${jobId} new status : ${newStatus}`);
+        
+        const jobTables = document.querySelectorAll('.jobs-table');
+        jobTables.forEach(table => {
+            const jobRow = table.querySelector(`tr[data-job-id="${jobId}"]`);
+            if (jobRow) {
+                // Update status cell
+                const statusCell = jobRow.querySelector('td[class^="status-"]');
+                if (statusCell) {
+                    statusCell.className = `status-${newStatus}`;
+                    statusCell.textContent = newStatus;
+                }
+            }
+        });
+    }
+
     // Konfiguracja klienta MQTT
  const mqttConfig = {
      clientId: 'webclient_' + Math.random().toString(16).substr(2, 8),
@@ -77,6 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Browser connected to MQTT');
     
     // Wczytywanie subskrybcji
+    client.subscribe('/sync-job-status/#')
     console.log(`Subscribing ${subscribedUrls.length} urls`);
     subscribedUrls.forEach(path => {
         client.subscribe(path)
@@ -89,11 +107,16 @@ document.addEventListener('DOMContentLoaded', () => {
     client.on('message', (topic, message) => {
         console.log('Received:', topic, message.toString());
         const data = JSON.parse(message.toString());
+
         if (data.status) {
-            createPopup(`Status zlecenia ${topic.split('/')[1]} zmieniony na: ${data.status}`);
-        } else {
+            createPopup(`Status zlecenia ${topic} zmieniony na: ${data.status}`);
+        } else if (data.new_status) {            
+            updateJobStatus(topic.split('/')[2],data.new_status)
+        }else {
             createPopup(`${data.message}`);
         }
+        
+        
     });
 
 

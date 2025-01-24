@@ -206,6 +206,8 @@ const socket = io();
          socket.on('driver_accepted', (data) => {
             showPopUp('Zaproszenie zaakceptowane',`${data.driverName} ${data.driverSurname} przyjął twoje zaproszenie`,'success')
             const driversGrid = document.querySelector('.drivers-grid');
+            console.log(driversGrid);
+            
             if (driversGrid) {
                 
                 const newDriverCard = `

@@ -90,6 +90,7 @@ router.patch('/:id/accept', auth, async (req, res) => {
         job.spedytorId = req.user.id;
         mqttClient.publish(`${job._id}`,JSON.stringify({status:job.status}))
         await job.save();
+        mqttClient.publish(`/sync-job-status/${job.id}`,JSON.stringify({new_status:job.status}))
 
         res.status(200).json('Job accepted')
     } catch (error) {
@@ -114,16 +115,19 @@ router.delete('/:id/delete', auth, async (req, res) => {
         if (timeUntilStart < 12 * 60 * 60 * 1000) { 
             return res.status(400).json({ error: 'Nie można zrezygnować ze zlecenia na mniej niż 12h przed rozpoczęciem' });
         }
-
-        global.io.to(job.driverId.toString()).emit('removed_job',{
-            job:job,
-            spedytorName: req.user.name,
-            spedytorSurname: req.user.surname
-        })
+        if (job.driverId) {
+            global.io.to(job.driverId.toString()).emit('removed_job',{
+                job:job,
+                spedytorName: req.user.name,
+                spedytorSurname: req.user.surname
+            })
+        }
+        
         job.status = 'active';
         job.spedytorId = null;
         job.driverId = null;
         await job.save();
+        mqttClient.publish(`/sync-job-status/${job.id}`,JSON.stringify({new_status:job.status}))
 
         mqttClient.publish(`${job._id}`,JSON.stringify({status:job.status}))
 
@@ -434,7 +438,7 @@ router.patch('/assign-driver/:driverId/:jobId', auth ,async (req, res) => {
         spedytorName: req.user.name,
         spedytorSurname: req.user.surname
     });
-
+    mqttClient.publish(`/sync-job-status/${job.id}`,JSON.stringify({new_status:job.status}))
     res.status(200).json('Driver assigned successfully')
 })
 
@@ -501,6 +505,7 @@ router.patch('/update-job-status', auth, async (req, res) => {
         job.status = status;
         await job.save();
         mqttClient.publish(`${jobId}`,JSON.stringify({status}))
+        mqttClient.publish(`/sync-job-status/${job.id}`,JSON.stringify({new_status:job.status}))
         
         res.status(200).json('Job status updated successfully')
 
